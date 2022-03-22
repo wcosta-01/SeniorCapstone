@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "2WKzTlJ2XbT4/Q4Wj/OySUb8P7beEr3NBFlF8+9WpoTKNjALDV08BXhsczaS0SwLYi0J4apSowQ9NsQ4exj+fA==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\deadg\\OneDrive\\Documents\\GithubRep\\SeniorCapstone\\Wit\\Wit\\Wit.iOS\\Wit.iOS.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\deadg\\.nuget\\packages\\system.numerics.vectors\\4.5.0\\system.numerics.vectors.4.5.0.nupkg.sha512",
+    "C:\\Users\\deadg\\.nuget\\packages\\xamarin.essentials\\1.7.0\\xamarin.essentials.1.7.0.nupkg.sha512",
+    "C:\\Users\\deadg\\.nuget\\packages\\xamarin.forms\\5.0.0.2196\\xamarin.forms.5.0.0.2196.nupkg.sha512"
+  ],
+  "logs": []
+}
