@@ -1,6 +1,9 @@
 '''
 This fill will be a list of commands that will be called at the end of the process to delete all the created files.
 
+!!!!!!!!!!It will also act as the master File for all the file paths throughout the structure for this project!!!!!!!!!!!!!!!!
+
+
 - All of the captured frames from VideoFrameCapture that are located in the Frames folder.
 - The world.mp4 video located in the ExportedData folder
 - The exported CSV file from batchExport located in ExportedData folder.
