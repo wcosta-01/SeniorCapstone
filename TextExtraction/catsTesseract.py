@@ -8,15 +8,17 @@ Creates bounding boxes around single characters from a video file.
 import numpy as np
 import cv2
 import pytesseract
+import file_dir
 import matplotlib.pyplot as plt
+video_dir = file_dir.video_dir
+
 
 pytesseract.pytesseract.tesseract_cmd = "C:/Program Files/Tesseract-OCR/tesseract.exe"
-
 font_scale = 1.5
 font = cv2.QT_FONT_BLACK
-RanVidTest= r'C:\Users\deadg\Videos\Rocket League\Rocket League 2019.11.21 - 23.01.18.02\mp4'
+
 #cap = cv2.VideoCapture(2)
-cap = cv2.VideoCapture(r"C:\Users\deadg\OneDrive\Documents\GithubRep\SeniorCapstone\recordings\2022_03_25\BookPagein1280\world.mp4")
+cap = cv2.VideoCapture(video_dir)
 if not cap.isOpened():
     cap = cv2.VideoCapture(0)
 if not cap.isOpened():
