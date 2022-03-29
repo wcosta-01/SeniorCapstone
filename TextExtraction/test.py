@@ -3,8 +3,7 @@ points = ['world_index', 'gaze_point_3d_x',
           'gaze_point_3d_y', 'gaze_point_3d_z']
 
 #table that consists of world_index and the gaze point locations
-gaze_point_3d = pd.read_csv(
-    'C:/Users/deadg/recordings/CapstoneCode/gaze_positions.csv', usecols=points)
+gaze_point_3d = pd.read_csv('C:/Users/deadg/recordings/CapstoneCode/gaze_positions.csv', usecols=points)
 
 #A simplified table that consists of the x and y positions in the world image in normalized coordinates
 #norm_pt_x = ['world_index', 'norm_pos_x']
@@ -12,8 +11,7 @@ gaze_point_3d = pd.read_csv(
 #norm_pt_w = ['world_index']
 
 norm_pt = ['world_index', 'norm_pos_x', 'norm_pos_y']
-gaze_pos = pd.read_csv(
-    'C:/Users/deadg/recordings/CapstoneCode/gaze_positions.csv', usecols=norm_pt)
+gaze_pos = pd.read_csv('C:/Users/deadg/recordings/CapstoneCode/gaze_positions.csv', usecols=norm_pt)
 
 
 #gaze_pos_x = pd.read_csv("C:/Users/deadg/recordings/CapstoneCode/gaze_positions.csv", usecols=norm_pt_x)
@@ -29,8 +27,7 @@ world_timestamps = pd.read_csv(
     r'C:/Users/deadg/recordings/CapstoneCode/world_timestamps.csv')
 
 #containts pupil positions
-pupil_positions = pd.read_csv(
-    r'C:/Users/deadg/recordings/CapstoneCode/pupil_positions.csv')
+pupil_positions = pd.read_csv(r'C:/Users/deadg/recordings/CapstoneCode/pupil_positions.csv')
 
 pd.set_option("display.max_rows", None, "display.max_columns", None)
 #gaze_pos.head()
