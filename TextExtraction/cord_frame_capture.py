@@ -3,41 +3,32 @@ import sys
 import pandas as pd
 import numpy as np
 
-points = ['world_index', 'gaze_point_3d_x', 'gaze_point_3d_y', 'gaze_point_3d_z']
+from file_dir import video_dir
+points = ['world_index', 'gaze_normal0_x', 'gaze_normal0_y', 'gaze_normal0_z']
 
-#table that consists of world_index and the gaze point locations
-gaze_point_3d = pd.read_csv(r'C:/Users/deadg/OneDrive/Documents/GithubRep/SeniorCapstone/TextExtraction/ExportedData/OldTestData/gaze_positions.csv')
+# The dataframe I plan on using
+gaze_normal = pd.read_csv(r'C:\Users\deadg\OneDrive\Documents\GithubRep\SeniorCapstone\recordings\Temp\000\exports\000\gaze_positions.csv', usecols=points)
 
 #A simplified table that consists of the x and y positions in the world image in normalized coordinates 
 #norm_pt_x = ['world_index', 'norm_pos_x']
 #norm_pt_y = ['world_index', 'norm_pos_y']
 #norm_pt_w = ['world_index']
+#norm_pt = ['world_index', 'norm_pos_x', 'norm_pos_y']
 
-norm_pt = ['world_index', 'norm_pos_x', 'norm_pos_y']
-gaze_pos = pd.read_csv('C:/Users/deadg/OneDrive/Documents/GithubRep/SeniorCapstone/TextExtraction/ExportedData/OldTestData/gaze_positions.csv', usecols=norm_pt)
+# Narrowing down data selection to only the rows we want
+#gaze_pos = pd.read_csv('C:/Users/deadg/OneDrive/Documents/GithubRep/SeniorCapstone/TextExtraction/ExportedData/OldTestData/gaze_positions.csv', usecols=points)
+
+# Assigning columns to variables
+pos_x = gaze_normal["gaze_normal0_x"]
+pos_y = gaze_normal["gaze_normal0_y"]
+pos_z = gaze_normal["gaze_normal0_z"]
+w_index = gaze_normal["world_index"]
 
 
-#gaze_pos_x = pd.read_csv("C:/Users/deadg/recordings/CapstoneCode/gaze_positions.csv", usecols=norm_pt_x)
-#gaze_pos_y = pd.read_csv("C:/Users/deadg/recordings/CapstoneCode/gaze_positions.csv", usecols=norm_pt_y)
-#gaze_pos_w = pd.read_csv("C:/Users/deadg/recordings/CapstoneCode/gaze_positions.csv", usecols=norm_pt_w)
-
-#contains the positional data for the users pupil(where the user is looking at a certian point in the video)
-gaze_positions = pd.read_csv(r'C:/Users/deadg/OneDrive/Documents/GithubRep/SeniorCapstone/TextExtraction/ExportedData/OldTestData/gaze_positions.csv')
-
-#Contains World Timestamps
-world_timestamps = pd.read_csv(r'C:/Users/deadg/OneDrive/Documents/GithubRep/SeniorCapstone/TextExtraction/ExportedData/OldTestData/world_timestamps.csv')
-
-#containts pupil positions
-pupil_positions = pd.read_csv(r'C:/Users/deadg/OneDrive/Documents/GithubRep/SeniorCapstone/TextExtraction/ExportedData/OldTestData/pupil_positions.csv')
-
-#To complete step 2 we have to figure out the data looks like when the user is focused on an object
-#The distance or size of an object is goind to present an issue with the way I have decided to select the frame
-#pd.set_option("display.max_rows", None, "display.max_columns", None)
-pos_x = gaze_pos["norm_pos_x"]
-pos_y = gaze_pos["norm_pos_y"]
-w_index = gaze_pos["world_index"]
-
-#IT WORKS THIS IS IT BABY
+'''
+    frame_Extract takes the tOrF values from the given list and returns a list of frame numbers that fit within
+    the given parameters. 
+'''
 # This takes out all the false values from the tOrF series
 def frame_Extract(tOrF):
     list_Index = []
@@ -103,29 +94,43 @@ def set_Y_coords(lowest, highest):
     tOrF_Y = pos_y.between(lowest, highest)
     return tOrF_Y
 
-# ---------------------------------------- Main ---------------------------------------------------------------------
-# Using the between method to make a true or false list based on a given range
-#These are the values that we will need to change.
-highest = .50
-lowest = .40
-# For the X coordinates
-tOrF_X = set_X_coords(lowest, highest)# is a list of true or false. if the value in pos_x fits within that range it becomes true if not its false.
-# For the Y coordinates
-tOrF_Y = set_Y_coords(lowest, highest)
+def set_Z_coords(lowest, highest):
+    tOrF_Z = pos_z.between(lowest, highest)
+    return tOrF_Z
 
-# Just double checking lengths
-if len(tOrF_X) == len(tOrF_Y):
-    Combined_TF = tOrF_X.eq(tOrF_Y)
-else:
-    print("YOU DONT WANT TO SEE THIS!!!!!!!!!!!!!!!!!!!!!!!!")
-# Sending the data through the methods
-mid_combined = frame_Extract(Combined_TF)
-print("The Combined list of coordinates is ", mid_combined)
-coord_comb = mid_combined[0]
-# Not sure if we still need this but it doesn't hurt
-mid_x = frame_Extract(tOrF_X)
-coord_x = mid_x[0]
-mid_y = frame_Extract(tOrF_Y)
-coord_y = mid_y[0]
-print("The X coordinate Frames are ", mid_x)
-print("The Y coordinate Frames are ", mid_y)
+# ---------------------------------------- Main ---------------------------------------------------------------------
+def selecting_frame():
+    # Using the between method to make a true or false list based on a given range
+    #These are the values that we will need to change.
+    highest = .50
+    lowest = .40
+    # For the X coordinates
+    tOrF_X = set_X_coords(lowest, highest)# is a list of true or false. if the value in pos_x fits within that range it becomes true if not its false.
+    # For the Y coordinates
+    tOrF_Y = set_Y_coords(lowest, highest)
+    tOrF_Z = set_Z_coords(lowest, highest)
+
+    # Just double checking lengths
+    # Combined_TF is a combinded list of the tOrF list for the x, y and z coordinates.
+    if len(tOrF_X) == len(tOrF_Y):
+        Combined_TF = tOrF_X.eq(tOrF_Y)
+        Combined_TF.eq(tOrF_Z)
+    else:
+        print("YOU DONT WANT TO SEE THIS!!!!!!!!!!!!!!!!!!!!!!!!")
+        # Sending the data through the methods
+
+    mid_combined = frame_Extract(Combined_TF)
+    # print("The Combined list of coordinates is ", mid_combined)
+    coord_comb = mid_combined[0]
+    return coord_comb
+
+
+    # Not sure if we still need this but it doesn't hurt
+    ''' For some reason idk why this is having an issue 
+        mid_x = frame_Extract(tOrF_X)
+        print("The X coordinate Frames are ", mid_x)
+        mid_y = frame_Extract(tOrF_Y)
+        print("The Y coordinate Frames are ", mid_y)
+        mid_z = frame_Extract(tOrF_Z)
+        print("The Z coordinate Frames are ", mid_z)
+    '''

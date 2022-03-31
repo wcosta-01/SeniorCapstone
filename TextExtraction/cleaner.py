@@ -34,8 +34,6 @@ def is_not_empty(dir_path):
 '''
  byebye_data Removes files from a given directory.
 '''
-
-
 def byebye_data(input_dir):
     # folder path
     # Iterate directory

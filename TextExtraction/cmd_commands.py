@@ -8,7 +8,8 @@ cap_dir = "C:\Program Files (x86)\Pupil-Labs\Pupil v3.5.1\Pupil Capture v3.5.1"
 play_dir = "C:\Program Files (x86)\Pupil-Labs\Pupil v3.5.1\Pupil Player v3.5.1"
 record_dir = file_dir.ext_recordings_dir
 
-def start_cap():
+
+def start_capture():
     cap_command = "cd " + cap_dir + " & start pupil_capture.exe"
     cap = 'cmd /c ' + '"' + cap_command + '"'
     os.system(cap)
@@ -21,6 +22,21 @@ def start_player():
     play = 'cmd /c ' + '"' + add_dir + '"'
     os.system(play)
 
+'''
+    Takes any pupil exe file and kills it.
+    input = player or capture
+    returns string explaining exicution
+'''
+def kill_pupil(input):
+    if input != 'capture' or input != 'player':
+        return "input incorrect must be player or capture"
+    else:
+        kill_command = "taskkill/im pupil_" + input + ".exe"
+        kill = 'cmd /c ' + '"' + kill_command + '"'
+        os.system(kill)
+        return "Application killed"
+
+
 # Extracts the data from player
 def extract_data():
     sleep(6)
@@ -29,3 +45,4 @@ def extract_data():
     cmd_command = "powershell ; $wsh = New-Object -ComObject WScript.Shell ; $wsh.SendKeys('{e}')"
     shell_command = 'cmd /c ' + '"' + cmd_command + '"'
     os.system(shell_command)
+

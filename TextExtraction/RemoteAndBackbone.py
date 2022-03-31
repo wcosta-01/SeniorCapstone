@@ -29,16 +29,14 @@ pupil_remote = zmq.Socket(ctx, zmq.REQ)
 pupil_remote.connect('tcp://127.0.0.1:50020')
 rt_data = {}
 
-def start_record():  # start recording
-    # sleep(1)
+def start_stop_recording(seconds):  # start recording
+    sleep(1)
     pupil_remote.send_string('R')
     print("Recording Starting", pupil_remote.recv_string())
-
-
-def stop_recording():
-    sleep(5)
+    sleep(seconds)
     pupil_remote.send_string('r')
     print("Recording stopping ", pupil_remote.recv_string())
+
 
 def export_recoding():
     import os
@@ -46,39 +44,46 @@ def export_recoding():
     cmd_command = "powershell ; $wsh = New-Object -ComObject WScript.Shell ; $wsh.SendKeys('{e}')"
     shell_command = 'cmd /c ' + '"' + cmd_command + '"'
     os.system(shell_command)
+
+
 '''
     rt_data_collection or real-time data collection will connect to the pupil remote via local host.
     Once connected it will then connect a sub port that will pass the data from the glasses to the API,
     where it will be analysed and then returned to the machine. Then the code gets the desired topic from 
-    the data and displays it.      
+    the data and returns the coordinates
+    rt_data is where the real-time coordinates are from while the glasses where recording      
 '''
-ip = 'localhost'  # If you talk to a different machine use its IP.
-port = 50020  # The port defaults to 50020. Set in Pupil Capture GUI.
 
-# Request 'SUB_PORT' for reading data
-pupil_remote.send_string('SUB_PORT')
-sub_port = pupil_remote.recv_string()
 
-# Request 'PUB_PORT' for writing data
-pupil_remote.send_string('PUB_PORT')
-pub_port = pupil_remote.recv_string()
+def rt_data_collection(seconds):
+    ip = 'localhost'  # If you talk to a different machine use its IP.
+    port = 50020  # The port defaults to 50020. Set in Pupil Capture GUI.
 
-# Assumes `sub_port` to be set to the current subscription port
-subscriber = ctx.socket(zmq.SUB)
-subscriber.connect(f'tcp://{ip}:{sub_port}')
-subscriber.subscribe('gaze.')  # receive all gaze messages
+    # Request 'SUB_PORT' for reading data
+    pupil_remote.send_string('SUB_PORT')
+    sub_port = pupil_remote.recv_string()
 
-start_record()  # starts recording
-count = 0
-rt_data = {}
-numID = 0 # ID for the data instream
-while True and count != 100:
-    topic, payload = subscriber.recv_multipart()
-    message = msgpack.loads(payload)
-    #print(f"{topic}: {message}")
-    rt_data["real_time_{0}".format(numID)] = message[b'gaze_normal_3d']
-    numID += 1
-    count += 1
+    # Request 'PUB_PORT' for writing data
+    pupil_remote.send_string('PUB_PORT')
+    pub_port = pupil_remote.recv_string()
 
-stop_recording()
-# after recording go to pupil player and export video
+    # Assumes `sub_port` to be set to the current subscription port
+    subscriber = ctx.socket(zmq.SUB)
+    subscriber.connect(f'tcp://{ip}:{sub_port}')
+    subscriber.subscribe('gaze.')  # receive all gaze messages
+
+    start_stop_recording(seconds)  # starts recording
+    count = 0
+    #rt_data = {}  # real-time coordinates captured during recording
+    numID = 0  # ID for the incoming data
+    '''
+    Good for doing real-time but for just a quick start stop recording not so much
+    '''
+    while True and count != 10:  # Will keep running till the program is terminated
+        topic, payload = subscriber.recv_multipart()
+        message = msgpack.loads(payload)
+        #print(f"{topic}: {message}")
+        rt_data["real_time_{0}".format(numID)] = message[b'gaze_normal_3d']
+        numID += 1
+        count += 1
+    return rt_data

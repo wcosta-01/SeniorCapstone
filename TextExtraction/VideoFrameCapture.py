@@ -10,21 +10,18 @@ import cv2
 import os
 
 # importing from other files
-import FrameCapIMPTest as fCap
+import cord_frame_capture as fCap
 from cleaner import is_not_empty
 import file_dir
 
 # Assinging values from FrameCapIMPTest
-# Make sure to change these to the correct final version of FrameCapture
-combined = fCap.coord_comb
-ycoord = fCap.coord_y
-xcoord = fCap.coord_x
-
 # directories to be changed if need be
 frame_dir = file_dir.frame_dir
 video_dir = file_dir.video_dir
-
-
+'''
+    Takes the video file that was just recorded and splits it into separate frames.
+    
+'''
 def videoToFrames():
     # The location of the exported video file
     vidcap = cv2.VideoCapture(video_dir)
@@ -36,14 +33,16 @@ def videoToFrames():
         success, image = vidcap.read()
         # print('Read a new frame: ', success)
         count += 1
-
-
-def grabbingFrame():
+    return 1
+'''
+    Finds the given frame within the /Frames directory
+'''
+def grabbingFrame(selected_frame):
     for file in os.listdir(frame_dir):
         if os.path.isfile(os.path.join(frame_dir, file)):
             # file will look like this frame1.jpg
             # creating a string to iterate through the folder of frames
-            expectedStr = "frame" + str(xcoord) + ".jpg"
+            expectedStr = "frame" + str(selected_frame) + ".jpg"
             # checking if created string matches any of the file names inside the dir
             if file == expectedStr:
                 chosenFrame = file
@@ -52,9 +51,11 @@ def grabbingFrame():
 
 # Checking to make sure there are frames inside the Frames dir
 # and adding them if there are not any.
-if is_not_empty(frame_dir):
-    print("Already contains frames")
-    chosenFrame = grabbingFrame()
-else:
-    print("No frames on file, populating now")
-    videoToFrames()
+def frame_check():
+    if is_not_empty(frame_dir):
+        print("Already contains frames")
+        # could have the frames be deleted and remade?
+    else:
+        print("No frames on file, populating now")
+        if videoToFrames() == 1:
+            frame_check()
