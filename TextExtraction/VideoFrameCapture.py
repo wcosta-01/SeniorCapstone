@@ -11,7 +11,7 @@ import os
 
 # importing from other files
 import cord_frame_capture as fCap
-from cleaner import is_not_empty
+from cleaner import dir_not_empty
 import file_dir
 
 # Assinging values from FrameCapIMPTest
