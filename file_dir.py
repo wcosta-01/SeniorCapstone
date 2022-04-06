@@ -19,23 +19,3 @@ record_folder = "C:\\Users\\deadg\\OneDrive\\Documents\\GithubRep\\SeniorCapston
 cap_dir = "C:\\Program Files (x86)\\Pupil-Labs\\Pupil v3.5.1\\Pupil Capture v3.5.1"
 play_dir = "C:\\Program Files (x86)\\Pupil-Labs\\Pupil v3.5.1\\Pupil Player v3.5.1"
 
-'''
-    Making a directory checker that checks to see if files or locations are created
-    Going to use this before running kill_pupil in cmd_commands.py
-'''
-#def checking_files(input_dir):
-# Returns true if dir is not empty and false if the directory is empty
-def dir_not_empty(dir_path):
-    import os
-    count = 0
-    # Iterate directory
-    for file in os.listdir(dir_path):
-        # check if current path is a file
-        if os.path.isfile(os.path.join(dir_path, file)):
-            count += 1
-    # print('File count:', count)
-    if count == 0:
-        return False
-    else:
-        return True
-# end of is_empty

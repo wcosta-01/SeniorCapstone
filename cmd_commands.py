@@ -81,3 +81,20 @@ def byebye_data(input_dir):
         print("data deleted")
     else:
         print("Folder is empty")
+
+#def checking_files(input_dir):
+# Returns true if dir is not empty and false if the directory is empty
+def dir_not_empty(dir_path):
+    import os
+    count = 0
+    # Iterate directory
+    for file in os.listdir(dir_path):
+        # check if current path is a file
+        if os.path.isfile(os.path.join(dir_path, file)):
+            count += 1
+    # print('File count:', count)
+    if count == 0:
+        return False
+    else:
+        return True
+# end of is_empty

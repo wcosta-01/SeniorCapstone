@@ -10,7 +10,7 @@ import cv2
 import os
 
 # importing from other files
-from cleaner import dir_not_empty
+from cmd_commands import dir_not_empty
 import file_dir
 
 # Assinging values from FrameCapIMPTest
