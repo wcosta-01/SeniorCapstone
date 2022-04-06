@@ -1,13 +1,20 @@
+'''
+    This is the command center of the project.
+    - All of the commands are created and ran from this file.
+'''
 import file_dir
 import os
 from time import sleep
-from file_dir import
+from file_dir import dir_not_empty
+
+# Path that links to the exported World.mp4 file.
 video_dir = file_dir.video_dir
-# Pupil Capture C:\Program Files (x86)\Pupil-Labs\Pupil v3.5.1\Pupil Capture v3.5.1\pupil_capture.exe
-# pupil player C:\Program Files (x86)\Pupil-Labs\Pupil v3.5.1\Pupil Player v3.5.1\pupil_player.exe
-cap_dir = "C:\Program Files (x86)\Pupil-Labs\Pupil v3.5.1\Pupil Capture v3.5.1"
-play_dir = "C:\Program Files (x86)\Pupil-Labs\Pupil v3.5.1\Pupil Player v3.5.1"
-record_dir = file_dir.ext_recordings_dir
+# Used to start pupil capture
+cap_dir = file_dir.cap_dir
+# Used to start pupil player
+play_dir = file_dir.play_dir
+# Used to link the recording that will be exported in pupil player
+record_folder = file_dir.record_folder
 
 
 def start_capture():
@@ -19,7 +26,7 @@ def start_capture():
 # may take a few seconds to load
 def start_player():
     play_command = " cd " + play_dir + " & start pupil_player.exe "
-    add_dir = play_command + record_dir
+    add_dir = play_command + record_folder
     play = 'cmd /c ' + '"' + add_dir + '"'
     os.system(play)
 

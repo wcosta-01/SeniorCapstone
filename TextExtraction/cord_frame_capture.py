@@ -2,12 +2,13 @@ import csv
 import sys
 import pandas as pd
 import numpy as np
-
+from file_dir import gaze_dir
 from file_dir import video_dir
 points = ['world_index', 'gaze_normal0_x', 'gaze_normal0_y', 'gaze_normal0_z']
 
 # The dataframe I plan on using
-gaze_normal = pd.read_csv(r'C:\Users\deadg\OneDrive\Documents\GithubRep\SeniorCapstone\recordings\Temp\000\exports\000\gaze_positions.csv', usecols=points)
+# 004 change to 000 before push
+gaze_normal = pd.read_csv("C:\\Users\\deadg\\OneDrive\\Documents\\GithubRep\\SeniorCapstone\\recordings\\Temp\\004\exports\\000\\gaze_positions.csv", usecols=points)
 
 #A simplified table that consists of the x and y positions in the world image in normalized coordinates 
 #norm_pt_x = ['world_index', 'norm_pos_x']
@@ -101,36 +102,27 @@ def set_Z_coords(lowest, highest):
 # ---------------------------------------- Main ---------------------------------------------------------------------
 def selecting_frame():
     # Using the between method to make a true or false list based on a given range
-    #These are the values that we will need to change.
-    highest = .50
-    lowest = .40
+    # These are the values that we will need to change.
+    highest = .10
+    lowest = 0.0
     # For the X coordinates
-    tOrF_X = set_X_coords(lowest, highest)# is a list of true or false. if the value in pos_x fits within that range it becomes true if not its false.
+    tOrF_X = set_X_coords(lowest,
+                          highest)  # is a list of true or false. if the value in pos_x fits within that range it becomes true if not its false.
     # For the Y coordinates
     tOrF_Y = set_Y_coords(lowest, highest)
+
     tOrF_Z = set_Z_coords(lowest, highest)
 
     # Just double checking lengths
     # Combined_TF is a combinded list of the tOrF list for the x, y and z coordinates.
-    if len(tOrF_X) == len(tOrF_Y):
+    if len(tOrF_X) == len(tOrF_Y) and len(tOrF_Z) == len(tOrF_X) and len(tOrF_Z) == len(tOrF_Y):
         Combined_TF = tOrF_X.eq(tOrF_Y)
         Combined_TF.eq(tOrF_Z)
     else:
         print("YOU DONT WANT TO SEE THIS!!!!!!!!!!!!!!!!!!!!!!!!")
-        # Sending the data through the methods
+    # Sending the data through the methods
 
     mid_combined = frame_Extract(Combined_TF)
-    # print("The Combined list of coordinates is ", mid_combined)
-    coord_comb = mid_combined[0]
-    return coord_comb
-
-
-    # Not sure if we still need this but it doesn't hurt
-    ''' For some reason idk why this is having an issue 
-        mid_x = frame_Extract(tOrF_X)
-        print("The X coordinate Frames are ", mid_x)
-        mid_y = frame_Extract(tOrF_Y)
-        print("The Y coordinate Frames are ", mid_y)
-        mid_z = frame_Extract(tOrF_Z)
-        print("The Z coordinate Frames are ", mid_z)
-    '''
+    print("The Combined list of coordinates is ", mid_combined)
+    print("The chosen number is: ", mid_combined[0])
+    return mid_combined[0]

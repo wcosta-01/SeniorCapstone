@@ -10,7 +10,6 @@ import cv2
 import os
 
 # importing from other files
-import cord_frame_capture as fCap
 from cleaner import dir_not_empty
 import file_dir
 
@@ -52,7 +51,7 @@ def grabbingFrame(selected_frame):
 # Checking to make sure there are frames inside the Frames dir
 # and adding them if there are not any.
 def frame_check():
-    if is_not_empty(frame_dir):
+    if dir_not_empty(frame_dir):
         print("Already contains frames")
         # could have the frames be deleted and remade?
     else:

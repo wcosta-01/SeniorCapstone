@@ -1,15 +1,19 @@
 '''
-    This file controls the entire opperation
+    This file controls the entire operation.
+    Used to connect, run and test all the methods of the other files in the correct order.
 '''
+
 from time import sleep
 from cmd_commands import start_capture, start_player, extract_data, kill_pupil
+from TextExtraction.RemoteAndBackbone import rt_data_collection
+from TextExtraction.TranslatingPupilTesseract import set_rt_data_coords
+from TextExtraction.cord_frame_capture import selecting_frame
+from TextExtraction.VideoFrameCapture import frame_check
+from cmd_commands import byebye_data
 
 print("starting capture")
-# start_capture()  # starts up the pupil capture application
+# start_capture()  # starts up the pupil capture application *** NEED TO ADJUST TIMING IN ORDER TO GIVE IT ENOUGHT TIME TO LAUNCH.
 
-# -------------------- May need to move this below extract_data() to ensure the world.mp4 is created.
-from RemoteAndBackbone import rt_data_collection
-from TextExtraction.RTCoordVsTesseract import set_rt_data_coords
 
 '''
 Testing if it runs 2 twice or just gets the same data.
@@ -22,24 +26,24 @@ print("Testing Function call: ", test)
 print("starting player")
 start_player()
 
-
 print("extracting data")
 extract_data()  # Waits 6 seconds before starting extraction
 
+# ---------------------- Realtime analysis and Video Analysis Split -----------#
+
 # kill player once extraction is done
-print("Killing player", kill_pupil('player'))
+# print("Killing player", kill_pupil('player'))
 
 '''
     Now that the data has been extracted from the recording files we can run the image processing
     for the individual frames and the video.
 '''
 # Running cord_frame_capture to get the list of frames will work for analysis
-from cord_frame_capture import selecting_frame
+
 select_frame = selecting_frame()
 print("This is the chosen one: ", select_frame)
 # Running VideoFrameCapture to split the video file into frames for analysis
-from VideoFrameCapture import frame_check
-frame_check() # Will check if the directory already has frames, if its empty it will create them
 
-from cleaner import byebye_data
-# Was just going to test the cleaner out.
+frame_check()  # Will check if the directory already has frames, if its empty it will create them
+
+

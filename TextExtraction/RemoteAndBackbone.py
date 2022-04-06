@@ -29,6 +29,7 @@ pupil_remote = zmq.Socket(ctx, zmq.REQ)
 pupil_remote.connect('tcp://127.0.0.1:50020')
 rt_data = {}
 
+
 def start_stop_recording(seconds):  # start recording
     sleep(1)
     pupil_remote.send_string('R')
@@ -74,16 +75,18 @@ def rt_data_collection(seconds):
 
     start_stop_recording(seconds)  # starts recording
     count = 0
-    #rt_data = {}  # real-time coordinates captured during recording
+    # rt_data = {}  # real-time coordinates captured during recording
     numID = 0  # ID for the incoming data
     '''
     Good for doing real-time but for just a quick start stop recording not so much
     '''
-    while True and count != 10:  # Will keep running till the program is terminated
+    while True and count != seconds:  # Will keep running till the program is terminated
         topic, payload = subscriber.recv_multipart()
         message = msgpack.loads(payload)
-        #print(f"{topic}: {message}")
+        # print(f"{topic}: {message}")
         rt_data["real_time_{0}".format(numID)] = message[b'gaze_normal_3d']
+        print(rt_data)
         numID += 1
         count += 1
     return rt_data
+rt_data_collection(10000)
