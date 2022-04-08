@@ -13,10 +13,9 @@ import os
 from cmd_commands import dir_not_empty
 import file_dir
 
-# Assinging values from FrameCapIMPTest
 # directories to be changed if need be
 frame_dir = file_dir.frame_dir
-video_dir = file_dir.video_dir
+video_dir = file_dir.test_video_dir
 '''
     Takes the video file that was just recorded and splits it into separate frames.
     
@@ -46,15 +45,17 @@ def grabbingFrame(selected_frame):
             if file == expectedStr:
                 chosenFrame = file
                 return chosenFrame
-
+    print("Frames populated")
 
 # Checking to make sure there are frames inside the Frames dir
 # and adding them if there are not any.
+# ---------------------Call this method to run this file
 def frame_check():
+    from TextExtraction.cord_frame_capture import selecting_frame
     if dir_not_empty(frame_dir):
         print("Already contains frames")
-        # could have the frames be deleted and remade?
+        return grabbingFrame(selecting_frame())
     else:
         print("No frames on file, populating now")
-        if videoToFrames() == 1:
-            frame_check()
+        videoToFrames()
+        return frame_check()

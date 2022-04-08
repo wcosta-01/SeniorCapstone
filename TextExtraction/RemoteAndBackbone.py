@@ -89,4 +89,3 @@ def rt_data_collection(seconds):
         numID += 1
         count += 1
     return rt_data
-rt_data_collection(10000)
