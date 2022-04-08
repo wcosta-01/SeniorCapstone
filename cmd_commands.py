@@ -5,7 +5,7 @@
 import file_dir
 import os
 from time import sleep
-from file_dir import dir_not_empty
+
 
 # Path that links to the exported World.mp4 file.
 video_dir = file_dir.video_dir
@@ -78,7 +78,7 @@ def byebye_data(input_dir):
             final_command = 'cmd /c ' + '"' + cmd_command + '"'
             # Sending the command to the system
             os.system(final_command)
-        print("data deleted")
+        print("Data has been deleted!")
     else:
         print("Folder is empty")
 
