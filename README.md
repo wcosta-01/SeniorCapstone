@@ -11,10 +11,10 @@ We have used many of the resources that pupil labs has published along with a fe
 ## Program Structure
 We have spilt the process into a collection of files that connect and allow for easy modification. Each file has its own methods that are either ran from within the same file or from a Control file.
 
-### cor_frame_capture
-Frame capture takes the gaze data from a given recording and uses it to find which frames of the video where the user was looking in the same area. 
+### Frame Selection
+Frame selection takes the gaze data from a given recording and uses it to find which frames of the video where the user was looking in the same area. 
 
-Frame capture does this by taking 4 columns of data from the gaze_position.csv, the world_index(the closest world video frame), and gaze_normal0_x, gaze_normal0_y, and gaze_normal0_z.
+Frame selection does this by taking 4 columns of data from the gaze_position.csv, the world_index(the closest world video frame), and gaze_normal0_x, gaze_normal0_y, and gaze_normal0_z.
 
 
 We then look for the smallest rate of change in each coordinate column. Then we compare each coordinate and select the world_index where all 3 coordinates are within 
