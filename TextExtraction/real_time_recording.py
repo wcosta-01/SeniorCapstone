@@ -6,7 +6,6 @@
  License details are in the file license.txt, distributed as part of this software.
 ----------------------------------------------------------------------------------~(*)
 """
-from TextExtraction.real_time_frame_sel import real_time
 
 """
 This example demonstrates how to send simple messages to the Pupil Remote plugin
@@ -22,7 +21,7 @@ This example demonstrates how to send simple messages to the Pupil Remote plugin
 import zmq
 import msgpack
 
-from time import sleep, time
+from time import sleep
 
 # https://docs.pupil-labs.com/developer/core/network-api/#pupil-remote
 ctx = zmq.Context()
