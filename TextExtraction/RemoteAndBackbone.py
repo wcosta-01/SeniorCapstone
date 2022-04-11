@@ -6,6 +6,7 @@
  License details are in the file license.txt, distributed as part of this software.
 ----------------------------------------------------------------------------------~(*)
 """
+from TextExtraction.real_time_frame_sel import real_time
 
 """
 This example demonstrates how to send simple messages to the Pupil Remote plugin
@@ -75,17 +76,32 @@ def rt_data_collection(seconds):
 
     start_stop_recording(seconds)  # starts recording
     count = 0
-    # rt_data = {}  # real-time coordinates captured during recording
     numID = 0  # ID for the incoming data
-    '''
-    Good for doing real-time but for just a quick start stop recording not so much
-    '''
+    time_stamps = []
+    point_pox = []
+    point_poy = []
+    point_poz = []
+
     while True and count != seconds:  # Will keep running till the program is terminated
         topic, payload = subscriber.recv_multipart()
         message = msgpack.loads(payload)
         # print(f"{topic}: {message}")
-        rt_data["real_time_{0}".format(numID)] = message[b'gaze_normal_3d']
-        print(rt_data)
+        rt_num = "real_time_{0}".format(numID)
+        rt_timestamp = message[b'timestamp']
+        rt_data[rt_timestamp] = message[b'gaze_point_3d']
+        # print(rt_data)
+        cur_message = message[b'gaze_point_3d']
         numID += 1
         count += 1
+
+        # Getting all the coordinate values into their own lists for calibration
+        time_stamps.append(rt_timestamp)
+        point_pox.append(cur_message[0])
+        point_poy.append(cur_message[1])
+        point_poz.append(cur_message[2])
+        cur_x = cur_message[0]
+        cur_y = cur_message[1]
+        cur_z = cur_message[2]
     return rt_data
+
+rt_data_collection(20)

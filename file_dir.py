@@ -19,7 +19,8 @@ gaze_dir = export_folder + "\\000\\gaze_positions.csv"
 # testing data paths
 test_video_dir = "C:\\Users\\deadg\\OneDrive\\Documents\\GithubRep\\SeniorCapstone\\recordings\\1920x1080\\000\\exports\\000\\world.mp4"
 test_gaze_dir = "C:\\Users\\deadg\\OneDrive\\Documents\\GithubRep\\SeniorCapstone\\recordings\\1920x1080\\000\\exports\\000\\gaze_positions.csv"
-
+test_gaze_dir2 = "C:\\Users\\deadg\\OneDrive\\Documents\\GithubRep\\SeniorCapstone\\recordings\\1920x1080_tests\\000\\exports\\000\\gaze_positions.csv"
+test_gaze_dir3 = "C:\\Users\\deadg\\OneDrive\\Documents\\GithubRep\\SeniorCapstone\\recordings\\1920x1080_tests\\001\\exports\\000\\gaze_positions.csv"
 # Paths for running the pupil programs for cmd commands
 cap_dir = "C:\\Program Files (x86)\\Pupil-Labs\\Pupil v3.5.1\\Pupil Capture v3.5.1"
 play_dir = "C:\\Program Files (x86)\\Pupil-Labs\\Pupil v3.5.1\\Pupil Player v3.5.1"
