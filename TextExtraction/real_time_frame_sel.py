@@ -9,7 +9,6 @@ import msgpack
 ctx = zmq.Context()
 pupil_remote = zmq.Socket(ctx, zmq.REQ)
 pupil_remote.connect('tcp://127.0.0.1:50020')
-rt_data = {}
 ip = 'localhost'  # If you talk to a different machine use its IP.
 port = 50020  # The port defaults to 50020. Set in Pupil Capture GUI.
 
@@ -27,22 +26,13 @@ subscriber.connect(f'tcp://{ip}:{sub_port}')
 subscriber.subscribe('gaze.')  # receive all gaze messages
 
 count = 0
-# rt_data = {}  # real-time coordinates captured during recording
+rt_data = {}  # real-time coordinates captured during recording
 numID = 0  # ID for the incoming data
 time_stamps = []
 point_pox = []
 point_poy = []
 point_poz = []
-groupNum = 0
-grouped_coords = {}
-temp_group = []
-dif_x = 15
-dif_y = 25
-dif_z = 30
 
-'''
-    Good for doing real-time but for just a quick start stop recording not so much
-'''
 while True and count != 500:  # Will keep running till the program is terminated
     topic, payload = subscriber.recv_multipart()
     message = msgpack.loads(payload)
@@ -65,7 +55,7 @@ while True and count != 500:  # Will keep running till the program is terminated
     cur_z = cur_message[2]
 
 
-    # DONT NEED THIS SHIT
+    # DONT NEED THIS
     '''
     last_val = point_pox[point_pox.index(cur_x) - 1]
     if abs(last_val > cur_x):

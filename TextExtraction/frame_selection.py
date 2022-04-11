@@ -21,10 +21,9 @@ point_poz = gaze_points["gaze_point_3d_z"]
 gaze_points = {"world_index": w_index, "X": point_pox, "Y": point_poy, "Z": point_poz}
 gaze_points = pd.DataFrame.from_dict(gaze_points)
 
-gaze_points.drop_duplicates(subset = ["world_index"], inplace=True)
-gaze_points_ints.drop_duplicates(subset = ["world_index"], inplace=True)
-
-
+# Drops duplicates
+gaze_points.drop_duplicates(subset=["world_index"], inplace=True)
+gaze_points_ints.drop_duplicates(subset=["world_index"], inplace=True)
 
 '''
     frame_Extract takes the tOrF values from the given list and returns a list of frame numbers that fit within
@@ -37,8 +36,8 @@ def frame_Extract(coord_list, inputType):
     # highest_dif is the difference allowed between the first element in coord_list and the rest of the elements in the list
     highest_dif = max(avg_dif)  # Using the largest difference to be the highest_dif
     groupNum = 0
-    grouped_frames = {} # for the frame numbers
-    grouped_coords = {} # for the coordinates
+    grouped_frames = {}  # for the frame numbers
+    grouped_coords = {}  # for the coordinates
     temp_frames = []
     temp_coords = []
     count = 0
@@ -79,7 +78,8 @@ def frame_Extract(coord_list, inputType):
 # Takes the cleaned Data and goes through each key value pair and sends one list at a time to match_up
 def sorting_groups(grouped_world_indexes):
     sorted_list = {}
-    for key in sorted(grouped_world_indexes): # maybe remove sorted in order to not get the frames confused???++++++++++++++++++++++++++++++++++++++++++++++++
+    for key in sorted(
+            grouped_world_indexes):  # maybe remove sorted in order to not get the frames confused???++++++++++++++++++++++++++++++++++++++++++++++++
         sorted_list[key] = match_up(grouped_world_indexes[key])
         sorted_list[key] = get_average(sorted_list[key])
     return sorted_list
@@ -92,9 +92,11 @@ def match_up(list_index):
         list_world.append(w_index[x])
     return list_world
 
+
 # Gets the average number of a given list
 def get_average(input_list):
     return (sum(input_list) / len(input_list)).astype(int)
+
 
 def get_median(input_list):
     middle = float(len(input_list)) / 2
@@ -102,6 +104,7 @@ def get_median(input_list):
         return input_list[int(middle - .5)]
     else:
         return input_list[int(middle)]
+
 
 # ---------------------------------------- Main ---------------------------------------------------------------------
 
@@ -113,7 +116,6 @@ avg_dif = np.diff(abs(point_pox_int))
 print("The largest average difference is: ", max(avg_dif))
 selected_groups_X = frame_Extract(point_pox_int, "awda")
 print("The dictionary of the world_index for X ", selected_groups_X)
-
 
 # for y
 avg_dif = np.diff(abs(point_poy_int))
