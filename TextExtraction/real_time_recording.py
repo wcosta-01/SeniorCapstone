@@ -6,6 +6,7 @@
  License details are in the file license.txt, distributed as part of this software.
 ----------------------------------------------------------------------------------~(*)
 """
+from pandas import DataFrame
 
 """
 This example demonstrates how to send simple messages to the Pupil Remote plugin
@@ -20,15 +21,15 @@ This example demonstrates how to send simple messages to the Pupil Remote plugin
 """
 import zmq
 import msgpack
-
 from time import sleep
 
 # https://docs.pupil-labs.com/developer/core/network-api/#pupil-remote
 ctx = zmq.Context()
 pupil_remote = zmq.Socket(ctx, zmq.REQ)
 pupil_remote.connect('tcp://127.0.0.1:50020')
-rt_data = {}
 
+
+print("Running Real_time_recording")
 
 def start_stop_recording(seconds):  # start recording
     sleep(1)
@@ -76,10 +77,11 @@ def rt_data_collection(seconds):
     start_stop_recording(seconds)  # starts recording
     count = 0
     numID = 0  # ID for the incoming data
-    time_stamps = []
-    point_pox = []
-    point_poy = []
-    point_poz = []
+    rt_data = {}
+    time_stamps = []  # stores the timestamps from the live feed
+    point_pox = []  # stores the X coordinate values from the live feed
+    point_poy = []  # store the Y coordinates values from the live feed
+    point_poz = []  # store the Z coordinates values from the live feed
 
     while True and count != seconds:  # Will keep running till the program is terminated
         topic, payload = subscriber.recv_multipart()
@@ -94,13 +96,10 @@ def rt_data_collection(seconds):
         count += 1
 
         # Getting all the coordinate values into their own lists for calibration
+        # This data will need to be run by tesseract either here or from another method from another file.
         time_stamps.append(rt_timestamp)
         point_pox.append(cur_message[0])
         point_poy.append(cur_message[1])
         point_poz.append(cur_message[2])
-        cur_x = cur_message[0]
-        cur_y = cur_message[1]
-        cur_z = cur_message[2]
+    rt_data = DataFrame.from_dict(rt_data)
     return rt_data
-
-rt_data_collection(20)

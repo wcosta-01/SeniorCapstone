@@ -14,14 +14,14 @@ cap_dir = file_dir.cap_dir
 # Used to start pupil player
 play_dir = file_dir.play_dir
 # Used to link the recording that will be exported in pupil player
-record_folder = file_dir.record_folder
+record_folder = file_dir.temp_recording
 
 
 def start_capture():
     cap_command = "cd " + cap_dir + " & start pupil_capture.exe"
     cap = 'cmd /c ' + '"' + cap_command + '"'
     os.system(cap)
-
+    return " capture started"
 #opens player with a give recording directory
 # may take a few seconds to load
 def start_player():
@@ -29,7 +29,7 @@ def start_player():
     add_dir = play_command + record_folder
     play = 'cmd /c ' + '"' + add_dir + '"'
     os.system(play)
-
+    return " player started"
 '''
     Takes any pupil exe file and kills it.
     input = player or capture
@@ -47,9 +47,6 @@ def kill_pupil(input):
 
 # Extracts the data from player
 def extract_data():
-    sleep(6)
-    # run a cmd command that opens powershell and runs the following command in order to press the letter e to export the
-    # previously uploaded recording file.
     cmd_command = "powershell ; $wsh = New-Object -ComObject WScript.Shell ; $wsh.SendKeys('{e}')"
     shell_command = 'cmd /c ' + '"' + cmd_command + '"'
     os.system(shell_command)

@@ -15,11 +15,11 @@ import file_dir
 
 # directories to be changed if need be
 frame_dir = file_dir.frame_dir
-video_dir = file_dir.test_video_dir
+video_dir = file_dir.video_dir
 '''
-    Takes the video file that was just recorded and splits it into separate frames.
-    
+    Takes the video file that was just recorded and splits it into separate frames. 
 '''
+print("Running VideoFrameCapture")
 def videoToFrames():
     # The location of the exported video file
     vidcap = cv2.VideoCapture(video_dir)
@@ -31,30 +31,30 @@ def videoToFrames():
         success, image = vidcap.read()
         # print('Read a new frame: ', success)
         count += 1
+
+    print("Folder populated")
     return 1
 '''
-    Finds the given frame within the /Frames directory
+    Finds the given frame within the /Frames directory and makes a string to then be used to connect the 2
 '''
-def grabbingFrame(selected_frame):
+def grabbingFrame(image_data):
     for file in os.listdir(frame_dir):
         if os.path.isfile(os.path.join(frame_dir, file)):
             # file will look like this frame1.jpg
             # creating a string to iterate through the folder of frames
-            expectedStr = "frame" + str(selected_frame) + ".jpg"
+            expectedStr = "frame" + str(image_data) + ".jpg"
             # checking if created string matches any of the file names inside the dir
             if file == expectedStr:
-                chosenFrame = file
-                return chosenFrame
-    print("Frames populated")
+                return file
 
 # Checking to make sure there are frames inside the Frames dir
 # and adding them if there are not any.
 # ---------------------Call this method to run this file
 def frame_check():
-    from TextExtraction.cord_frame_capture import selecting_frame
+    from TextExtraction.frame_selection import image_data
     if dir_not_empty(frame_dir):
         print("Already contains frames")
-        return grabbingFrame(selecting_frame())
+        return grabbingFrame(image_data)
     else:
         print("No frames on file, populating now")
         videoToFrames()
