@@ -160,6 +160,6 @@ def wit_image(frame_name):
     print(words)
     im = plt.imshow(orig)
     plt.show()
-
+    return words
 # Shout out to this guy. Now let's do it in real time
 # https://medium.com/technovators/scene-text-detection-in-python-with-east-and-craft-cbe03dda35d5

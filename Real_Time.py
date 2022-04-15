@@ -1,6 +1,22 @@
-# import the necessary packages
-from os import O_WRONLY
-from imutils.video import VideoStream
+"""
+(*)~----------------------------------------------------------------------------------
+ Pupil Helpers
+ Copyright (C) 2012-2016  Pupil Labs
+ Distributed under the terms of the GNU Lesser General Public License (LGPL v3.0).
+ License details are in the file license.txt, distributed as part of this software.
+----------------------------------------------------------------------------------~(*)
+This example demonstrates how to send simple messages to the Pupil Remote plugin
+    'R' start recording with auto generated session name
+    'R rec_name' start recording and name new session name: rec_name
+    'r' stop recording
+    'C' start currently selected calibration
+    'c' stop currently selected calibration
+    'T 1234.56' Timesync: make timestamps count form 1234.56 from now on.
+    't' get pupil timestamp
+    '{notification}' send a notification via pupil remote.
+"""
+import zmq
+import msgpack
 from imutils.object_detection import non_max_suppression
 import pandas as pd
 import numpy as np
@@ -12,7 +28,26 @@ import cv2
 import time
 from file_dir import video_dir, east_text_det, get_gaze_coords_rt
 
-print("Running in real-time")
+# https://docs.pupil-labs.com/developer/core/network-api/#pupil-remote
+ctx = zmq.Context()
+pupil_remote = zmq.Socket(ctx, zmq.REQ)
+pupil_remote.connect('tcp://127.0.0.1:50020')
+
+ip = 'localhost'  # If you talk to a different machine use its IP.
+port = 50020  # The port defaults to 50020. Set in Pupil Capture GUI.
+
+# Request 'SUB_PORT' for reading data
+pupil_remote.send_string('SUB_PORT')
+sub_port = pupil_remote.recv_string()
+
+# Request 'PUB_PORT' for writing data
+pupil_remote.send_string('PUB_PORT')
+pub_port = pupil_remote.recv_string()
+
+# Assumes `sub_port` to be set to the current subscription port
+subscriber = ctx.socket(zmq.SUB)
+subscriber.connect(f'tcp://{ip}:{sub_port}')
+subscriber.subscribe('gaze.')  # receive all gaze messages
 def decode_predictions(scores, geometry):
     # grab the number of rows and columns from the scores volume, then
     # initialize our set of bounding box rectangles and corresponding
@@ -70,21 +105,19 @@ def decode_predictions(scores, geometry):
         # return a tuple of the bounding boxes and associated confidences
     return (rects, confidences)
 
-def wit_video():
+def rt_data_collection(R_hig, R_wid):
+    from file_dir import get_gaze_coords_rt
+    count = 0
+    numID = 0  # ID for the incoming data
+    rt_data = []
+    time_stamps = []  # stores the timestamps from the live feed
+    norm_pos_x = []  # stores the X coordinate values from the live feed
+    norm_pos_y = []  # store the Y coordinates values from the live feed
 
     pytesseract.pytesseract.tesseract_cmd = "C:\\Program Files\\Tesseract-OCR\\tesseract.exe"
-    R_wid = 1920
-    R_hig = 1080
-    # For the video the resolution is flipped
-    toCheck = get_gaze_coords_rt(R_hig, R_wid)
-
-    # initialize the original frame dimensions, new frame dimensions,
-    # and ratio between the dimensions
-
     (W, H) = (None, None)
     (newW, newH) = (320, 320)
     (rW, rH) = (None, None)
-
     # define the two output layer names for the EAST detector model that
     # we are interested -- the first is the output probabilities and the
     # second can be used to derive the bounding box coordinates of text
@@ -96,14 +129,37 @@ def wit_video():
     print("[INFO] loading EAST text detector...")
     net = cv2.dnn.readNet(east_text_det)
 
-    # if a video path was not supplied, grab the reference to the web cam
-
     # otherwise, grab a reference to the video file
     vs = cv2.VideoCapture(0)
 
     index = 0
     # loop over frames from the video stream
-    while True:
+
+    while True:  # Will keep running till the program is terminated
+
+        topic, payload = subscriber.recv_multipart()
+        message = msgpack.loads(payload)
+        rt_num = "real_time_{0}".format(numID)
+        rt_timestamp = message[b'timestamp']
+        rt_data = message[b'norm_pos']
+        cur_message = message[b'norm_pos']
+        numID += 1
+        '''
+        time_stamps.append(rt_timestamp)
+        norm_pos_x.append(cur_message[0])
+        norm_pos_y.append(cur_message[1])
+        norm_pos = {"Time_stamps": time_stamps, "norm_pos_x": norm_pos_x, "norm_pos_y": norm_pos_y}
+        '''
+
+        # pos_x =0 pos_y =1
+        rt_data[0] = rt_data[0] * R_wid
+        rt_data[1] = rt_data[1] * R_hig
+
+        rt_data[0] = int(rt_data[0])
+        rt_data[1] = int(rt_data[1])
+        rt_data[1] = R_hig - rt_data[1]
+
+        toCheck = rt_data
         # grab the current frame, then handle if we are using a
         # VideoStream or VideoCapture object
         if not vs.isOpened():
@@ -141,8 +197,11 @@ def wit_video():
         (rects, confidences) = decode_predictions(scores, geometry)
         boxes = non_max_suppression(np.array(rects), probs=confidences)
 
-        x = int(toCheck[index][1] / oRW)
-        y = int(toCheck[index][2] / oRH)
+        # x = int(toCheck[index][1] / oRW)
+        # y = int(toCheck[index][2] / oRH)
+        x = int(toCheck[0] / oRW)
+        y = int(toCheck[1] / oRH)
+
 
         newBound = [x - 25, y - 25, x + 25, y + 25]
 
@@ -185,4 +244,3 @@ def wit_video():
     vs.release()
     # close all windows
     cv2.destroyAllWindows()
-wit_video()

@@ -8,6 +8,8 @@
 """
 from pandas import DataFrame
 
+
+
 """
 This example demonstrates how to send simple messages to the Pupil Remote plugin
     'R' start recording with auto generated session name
@@ -28,8 +30,23 @@ ctx = zmq.Context()
 pupil_remote = zmq.Socket(ctx, zmq.REQ)
 pupil_remote.connect('tcp://127.0.0.1:50020')
 
+ip = 'localhost'  # If you talk to a different machine use its IP.
+port = 50020  # The port defaults to 50020. Set in Pupil Capture GUI.
 
-print("Running Real_time_recording")
+# Request 'SUB_PORT' for reading data
+pupil_remote.send_string('SUB_PORT')
+sub_port = pupil_remote.recv_string()
+
+# Request 'PUB_PORT' for writing data
+pupil_remote.send_string('PUB_PORT')
+pub_port = pupil_remote.recv_string()
+
+# Assumes `sub_port` to be set to the current subscription port
+subscriber = ctx.socket(zmq.SUB)
+subscriber.connect(f'tcp://{ip}:{sub_port}')
+subscriber.subscribe('gaze.')  # receive all gaze messages
+
+
 
 def start_stop_recording(seconds):  # start recording
     sleep(1)
@@ -57,27 +74,12 @@ def export_recoding():
 '''
 
 
-def rt_data_collection(seconds):
-    ip = 'localhost'  # If you talk to a different machine use its IP.
-    port = 50020  # The port defaults to 50020. Set in Pupil Capture GUI.
-
-    # Request 'SUB_PORT' for reading data
-    pupil_remote.send_string('SUB_PORT')
-    sub_port = pupil_remote.recv_string()
-
-    # Request 'PUB_PORT' for writing data
-    pupil_remote.send_string('PUB_PORT')
-    pub_port = pupil_remote.recv_string()
-
-    # Assumes `sub_port` to be set to the current subscription port
-    subscriber = ctx.socket(zmq.SUB)
-    subscriber.connect(f'tcp://{ip}:{sub_port}')
-    subscriber.subscribe('gaze.')  # receive all gaze messages
-
+def data_collection(seconds):
+    print("Recording for Video and Imaging")
     start_stop_recording(seconds)  # starts recording
     count = 0
     numID = 0  # ID for the incoming data
-    rt_data = {}
+    recording_data = {}
     time_stamps = []  # stores the timestamps from the live feed
     point_pox = []  # stores the X coordinate values from the live feed
     point_poy = []  # store the Y coordinates values from the live feed
@@ -89,9 +91,9 @@ def rt_data_collection(seconds):
         # print(f"{topic}: {message}")
         rt_num = "real_time_{0}".format(numID)
         rt_timestamp = message[b'timestamp']
-        rt_data[rt_timestamp] = message[b'gaze_point_3d']
+        recording_data[rt_timestamp] = message[b'norm_pos']
         # print(rt_data)
-        cur_message = message[b'gaze_point_3d']
+        cur_message = message[b'norm_pos']
         numID += 1
         count += 1
 
@@ -101,5 +103,7 @@ def rt_data_collection(seconds):
         point_pox.append(cur_message[0])
         point_poy.append(cur_message[1])
         point_poz.append(cur_message[2])
-    rt_data = DataFrame.from_dict(rt_data)
+    rt_data = DataFrame.from_dict(recording_data)
     return rt_data
+
+

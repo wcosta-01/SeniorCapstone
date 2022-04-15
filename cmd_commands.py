@@ -50,6 +50,7 @@ def extract_data():
     cmd_command = "powershell ; $wsh = New-Object -ComObject WScript.Shell ; $wsh.SendKeys('{e}')"
     shell_command = 'cmd /c ' + '"' + cmd_command + '"'
     os.system(shell_command)
+    return "Video and CSV extracted"
 
 '''
  byebye_data Removes files from a given directory.

@@ -13,8 +13,8 @@ print("starting capture", start_capture())
 sleep(10) # waits 10 seconds to fully load capture
 
 # Starts the recording and saving the data that is received in real-time
-from TextExtraction.real_time_recording import rt_data_collection
-rt_data = rt_data_collection(10)
+from TextExtraction.real_time_recording import data_collection
+rt_data = data_collection(10)
 # Now going to start pupil player to export the video files
 sleep(10)
 print("Starting player", start_player())
@@ -23,7 +23,7 @@ print("extracting data", extract_data())  # Waits 6 seconds before starting extr
 sleep(20)
 
 # kill player once extraction is done
-# print("Killing player", kill_pupil('player'))
+print("Killing player", kill_pupil('player'))
 
 # ---------------------- Realtime / video analysis and Image Analysis Split -----------#
 
@@ -42,17 +42,16 @@ frame_name = grabbingFrame(image_data)
 # Sending the data from the video
 
 
-from Tesseract import Wit, WitVideo, WitVideoRT_Data
+from Tesseract import Wit, WitVideo
 
 # for image processing
-Wit.wit_image(frame_name)
+# Wit.wit_image(frame_name)
 # sleep(5)
 byebye_data(frame_dir)
-print("Real-Time data", rt_data)
+# print("Real-Time data", rt_data)
 # for video or live processing
 WitVideo.wit_video()
-WitVideoRT_Data.wit_video(rt_data)
-
+# WitVideoRT_Data.wit_video(rt_data)
 
 #sleep(60)
 #byebye_data(temp_dir)

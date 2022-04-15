@@ -17,7 +17,7 @@ def frame_Extract(coord_list):
     for key, val in coord_list.items():
         # Find the differences between the initial and the rest of the list.
         if key + 1 != len(coord_list):
-            if abs(avg_dif[count]) >= 10:
+            if abs(avg_dif[count]) >= .2:
                 initial_Val = val
                 temp_coords.append(val)
                 temp_frames.append(key)
@@ -66,16 +66,15 @@ def comparing_xy(world_x, world_y):
 
 
 # gaze_point values
-points = ['world_index', 'gaze_point_3d_x', 'gaze_point_3d_y', 'gaze_point_3d_z']
+points = ['world_index', 'norm_pos_x', 'norm_pos_y']
 gaze_points = pd.read_csv(gaze_dir, usecols=points)
 # Drops duplicates
 gaze_points = gaze_points.drop_duplicates(subset=["world_index"]).reset_index(drop=True)
 # Narrowing down data selection to only the columns we want and converting them into ints for testing
 w_index = gaze_points["world_index"]
-point_pox = gaze_points["gaze_point_3d_x"].astype(int)
-point_poy = gaze_points["gaze_point_3d_y"].astype(int)
-point_poz = gaze_points["gaze_point_3d_z"].astype(int)
-gaze_points = {"world_index": w_index, "X": point_pox, "Y": point_poy}
+point_pox = gaze_points["norm_pos_x"]
+point_poy = gaze_points["norm_pos_y"]
+gaze_points = {"world_index": w_index, "norm_pos_x": point_pox, "norm_pos_y": point_poy}
 gaze_points = pd.DataFrame.from_dict(gaze_points)
 '''
 # For testing purposes

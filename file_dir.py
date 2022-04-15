@@ -8,6 +8,7 @@ Sources and helpfull links
 '''
 # Paths for running the pupil programs for cmd commands
 
+
 cap_dir = "C:\\Program Files (x86)\\Pupil-Labs\\Pupil v3.5.1\\Pupil Capture v3.5.1"
 play_dir = "C:\\Program Files (x86)\\Pupil-Labs\\Pupil v3.5.1\\Pupil Player v3.5.1"
 
@@ -25,37 +26,57 @@ export_temp_dir = temp_recording + "\\exports\\000"
 
 
 # testing data paths
-test_dir_1920 = recordings_dir + "\\recordings\\1920x1080_tests\\000\\exports\\001"
-test_dir_1280 = recordings_dir + "\\recordings\\Compare_resolutions\\1280X720\\000\\exports\\000"
+test_dir_1920 = recordings_dir + "\\Compare_resolutions\\1920x1080\\000\\exports\\000"
+test_dir_1280 = recordings_dir + "\\Compare_resolutions\\1280X720\\000\\exports\\000"
 
 
 # Just change the folder that is added
 # export_temp_dir is the default temp path
-video_dir = test_dir_1280 + "\\world.mp4"
-gaze_dir = test_dir_1280 + "\\gaze_positions.csv"
+video_dir = export_temp_dir + "\\world.mp4"
+gaze_dir = export_temp_dir + "\\gaze_positions.csv"
 
 
 
 def get_gaze_coords_image(h, w):
     from TextExtraction.frame_selection import video_rt_data
     df = video_rt_data
-    df["X"] = video_rt_data["X"].astype(int) + int(w/2)
-    df["Y"] = video_rt_data["Y"].astype(int) + int(h/2)
+    df["norm_pos_x"] = df["norm_pos_x"] * w
+    df["norm_pos_y"] = df["norm_pos_y"] * h
 
+    df["norm_pos_x"] = df["norm_pos_x"].astype(int)
+    df["norm_pos_y"] = df["norm_pos_y"].astype(int)
+    df["norm_pos_y"] = h - df["norm_pos_y"]
     # df.drop_duplicates(subset = "world_index", keep = "first", inplace=False)
 
     return df.values.tolist()
 
-def get_gaze_coords(h, w):
-    columns = ["world_index", "gaze_point_3d_x", "gaze_point_3d_y"]
+def get_gaze_coords_vid(h, w):
+    columns = ["world_index", "norm_pos_x", "norm_pos_y"]
     df = pd.read_csv(gaze_dir, usecols=columns)
+    # The y values are mirrored...
+    df["norm_pos_x"] = df["norm_pos_x"] * w
+    df["norm_pos_y"] = df["norm_pos_y"] * h
 
-    df["gaze_point_3d_x"] = df["gaze_point_3d_x"].astype(int) + int(w / 2)
-    df["gaze_point_3d_y"] = df["gaze_point_3d_y"].astype(int) + int(h / 2)
+    df["norm_pos_x"] = df["norm_pos_x"].astype(int)
+    df["norm_pos_y"] = df["norm_pos_y"].astype(int)
+    df["norm_pos_y"] = h - df["norm_pos_y"]
 
     df = df.drop_duplicates(subset=["world_index"]).reset_index(drop=True)
 
     return df.values.tolist()
+
+def get_gaze_coords_rt(h,w, norm_pos):
+    # pos_x =0 pos_y =1
+    norm_pos[0] = norm_pos[0] * w
+    norm_pos[1] = norm_pos[1] * h
+
+    norm_pos[0] = int(norm_pos[0])
+    norm_pos[1] = int(norm_pos[1])
+    norm_pos[1] = h - norm_pos[1]
+
+    return norm_pos
+
+
 # displaying the paths when file_dir is run so output has history
 print("----------Directory file Paths----------")
 print("This is the recording path", temp_recording, "\n")

@@ -10,7 +10,7 @@ import imutils
 import time
 import cv2
 import time
-from file_dir import video_dir, get_gaze_coords, east_text_det
+from file_dir import video_dir, east_text_det, get_gaze_coords_vid
 
 print("Running WitVideo")
 def decode_predictions(scores, geometry):
@@ -69,26 +69,14 @@ def decode_predictions(scores, geometry):
 
         # return a tuple of the bounding boxes and associated confidences
     return (rects, confidences)
-'''
-def get_gaze_coords(h, w):
-    columns = ["world_index", "gaze_point_3d_x", "gaze_point_3d_y"]
-    df = pd.read_csv(test_gaze_dir, usecols=columns)
 
-    df["gaze_point_3d_x"] = df["gaze_point_3d_x"].astype(int) + int(w/2)
-    df["gaze_point_3d_y"] = df["gaze_point_3d_y"].astype(int) + int(h/2)
-
-    df = df.drop_duplicates(subset = ["world_index"]).reset_index(drop = True)
-    # gaze_points.drop_duplicates(subset=["world_index"], inplace=True)
-    return df.values.tolist()
-'''
-
-#if __name__ == "__main__":
 def wit_video():
 
     pytesseract.pytesseract.tesseract_cmd = "C:\\Program Files\\Tesseract-OCR\\tesseract.exe"
-    R_wid = 1280
-    R_hig = 720
-    toCheck = get_gaze_coords(R_wid, R_hig)
+    R_wid = 1920
+    R_hig = 1080
+    # For the video the resolution is flipped
+    toCheck = get_gaze_coords_vid(R_hig, R_wid)
 
     # initialize the original frame dimensions, new frame dimensions,
     # and ratio between the dimensions
@@ -142,6 +130,7 @@ def wit_video():
 
         # resize the frame, this time ignoring aspect ratio
         frame = cv2.resize(frame, (newW, newH))
+
         # construct a blob from the frame and then perform a forward pass
         # of the model to obtain the two output layer sets
         blob = cv2.dnn.blobFromImage(frame, 1.0, (newW, newH), (123.68, 116.78, 103.94), swapRB=True, crop=False)
@@ -152,12 +141,10 @@ def wit_video():
         (rects, confidences) = decode_predictions(scores, geometry)
         boxes = non_max_suppression(np.array(rects), probs=confidences)
 
-        # putting in an auto quit
-
         x = int(toCheck[index][1] / oRW)
         y = int(toCheck[index][2] / oRH)
 
-        newBound = [x - 50, y - 50, x + 50, y + 50]
+        newBound = [x - 15, y - 15, x + 15, y + 15]
 
         cv2.rectangle(orig, (int(newBound[0]), int(newBound[1])), (int(newBound[2]), int(newBound[3])), (0, 255, 0), 2)
 
@@ -165,31 +152,24 @@ def wit_video():
         for (startX, startY, endX, endY) in boxes:
             # scale the bounding box coordinates based on the respective
             # ratios
-            # print(startX, startY, endX, endY)
-            startX = int(startX * rW)
-            startY = int(startY * rH)
-            endX = int(endX * rW)
-            endY = int(endY * rH)
-            # draw the bounding box on the frame
-            # print(startX, startY, endX, endY)
-            cv2.rectangle(orig, (startX-15, startY-15), (endX+15, endY+15), (0, 255, 0), 2)
+                # print(startX, startY, endX, endY)
+                startX = int(startX * rW)
+                startY = int(startY * rH)
+                endX = int(endX * rW)
+                endY = int(endY * rH)
+                # draw the bounding box on the frame
+                # print(startX, startY, endX, endY)
+                # Add padding
+                cv2.rectangle(orig, (startX, startY), (endX, endY), (0, 255, 0), 2)
 
-            if (newBound[0] < endX and newBound[2] > startX and newBound[1] < endY and newBound[3] > startY):
-                r = orig[startY:endY, startX:endX]
-                r = cv2.cvtColor(r, cv2.COLOR_BGR2GRAY)
-                r = cv2.GaussianBlur(r, (7, 7), 0)
-                r = cv2.adaptiveThreshold(r, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 21, 4)
-                text = pytesseract.image_to_string(r)
-                cv2.putText(frame, text, (newBound[0], newBound[1]), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
-                print(text)
-        # rW = 3.125, rH = 1.75625
-        # x = int((-65.8343650936389 + (1280/2)) / oRW)
-        # print(x)
-        # y = int((-11.8607818305806 + (720/2)) / oRH)
-        # print(y)
-        # newBound = [(x - 50), (y - 50), (x + 50), (y + 50)]
-        # print(newBound)
-
+                if(newBound[0] < endX and newBound[2] > startX and newBound[1] < endY and newBound[3] > startY):
+                    r = orig[startY:endY, startX:endX]
+                    r = cv2.cvtColor(r, cv2.COLOR_BGR2GRAY)
+                    r = cv2.GaussianBlur(r, (7, 7), 0)
+                    r = cv2.adaptiveThreshold(r, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 21, 4)
+                    text = pytesseract.image_to_string(r)
+                    cv2.putText(frame, text, (newBound[0], newBound[1]), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0,0,255), 2)
+                    print(text)
         # show the output frame
         cv2.imshow("Text Detection", orig)
         key = cv2.waitKey(1) & 0xFF
@@ -205,4 +185,3 @@ def wit_video():
     vs.release()
     # close all windows
     cv2.destroyAllWindows()
-

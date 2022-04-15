@@ -9,10 +9,7 @@ import argparse
 import imutils
 import time
 import cv2
-import time
-from file_dir import video_dir, east_text_det, get_gaze_coords_rt
 
-print("Running in real-time")
 def decode_predictions(scores, geometry):
     # grab the number of rows and columns from the scores volume, then
     # initialize our set of bounding box rectangles and corresponding
@@ -70,13 +67,27 @@ def decode_predictions(scores, geometry):
         # return a tuple of the bounding boxes and associated confidences
     return (rects, confidences)
 
-def wit_video():
+def get_gaze_coords(h, w):
+    columns = ["world_index", "norm_pos_x", "norm_pos_y"]
+    df = pd.read_csv("000\exports\\000\gaze_positions.csv", usecols=columns)
+
+    # The y values are mirrored...
+    df["norm_pos_x"] = df["norm_pos_x"] * w
+    df["norm_pos_y"] = df["norm_pos_y"] * h
+
+    df["norm_pos_x"] = df["norm_pos_x"].astype(int)
+    df["norm_pos_y"] = df["norm_pos_y"].astype(int)
+    df["norm_pos_y"] = h - df["norm_pos_y"]
+
+    df = df.drop_duplicates(subset = ["world_index"]).reset_index(drop = True)
+
+    return df.values.tolist()
+
+if __name__ == "__main__":
 
     pytesseract.pytesseract.tesseract_cmd = "C:\\Program Files\\Tesseract-OCR\\tesseract.exe"
-    R_wid = 1920
-    R_hig = 1080
-    # For the video the resolution is flipped
-    toCheck = get_gaze_coords_rt(R_hig, R_wid)
+
+    toCheck = get_gaze_coords(1080, 1920)
 
     # initialize the original frame dimensions, new frame dimensions,
     # and ratio between the dimensions
@@ -94,12 +105,12 @@ def wit_video():
 
     # load the pre-trained EAST text detector
     print("[INFO] loading EAST text detector...")
-    net = cv2.dnn.readNet(east_text_det)
+    net = cv2.dnn.readNet("frozen_east_text_detection.pb")
 
     # if a video path was not supplied, grab the reference to the web cam
 
     # otherwise, grab a reference to the video file
-    vs = cv2.VideoCapture(0)
+    vs = cv2.VideoCapture("000\exports\\000\world.mp4")
 
     index = 0
     # loop over frames from the video stream
@@ -108,21 +119,21 @@ def wit_video():
         # VideoStream or VideoCapture object
         if not vs.isOpened():
             vs = cv2.VideoCapture(0)
-
+            
         _, frame = vs.read()
-
+            
         # check to see if we have reached the end of the stream
         if frame is None:
             break
         # resize the frame, maintaining the aspect ratio
         frame = imutils.resize(frame, width=1000)
         (oH, oW) = frame.shape[:2]
-        oRW = R_wid / float(oW)
-        oRH = R_hig / float(oH)
+        oRW = 1920 / float(oW)
+        oRH = 1080 / float(oH)
         orig = frame.copy()
         # print(oH, oW)
 
-        # new is the size required for EAST, r is the ratio compared to the actual frame dimension and for EAST
+        #new is the size required for EAST, r is the ratio compared to the actual frame dimension and for EAST
         if W is None or H is None:
             (H, W) = frame.shape[:2]
             rW = W / float(newW)
@@ -144,9 +155,9 @@ def wit_video():
         x = int(toCheck[index][1] / oRW)
         y = int(toCheck[index][2] / oRH)
 
-        newBound = [x - 25, y - 25, x + 25, y + 25]
+        newBound = [x - 15, y - 15, x + 15, y + 15]
 
-        cv2.rectangle(orig, (int(newBound[0]), int(newBound[1])), (int(newBound[2]), int(newBound[3])), (0, 255, 0), 2)
+        cv2.rectangle(orig, (newBound[0], newBound[1]), (newBound[2], newBound[3]), (0, 255, 0), 2)
 
         # loop over the bounding boxes
         for (startX, startY, endX, endY) in boxes:
@@ -185,4 +196,3 @@ def wit_video():
     vs.release()
     # close all windows
     cv2.destroyAllWindows()
-wit_video()
