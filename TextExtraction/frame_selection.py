@@ -100,7 +100,7 @@ matching_indexes = comparing_xy(world_x, world_y)
 # a dataframe that contains the matching x and y coordinates
 # This will go to Tesseract video processing
 video_rt_data = gaze_points.iloc[matching_indexes].reset_index(drop=True)
-# video_rt_data.to_csv('video_rt_data.csv')
+
 # This will go to videoFrameCapture
 image_data = int(video_rt_data.iloc[random.randint(0, len(video_rt_data["world_index"]))][0])
 
