@@ -8,6 +8,8 @@ from cmd_commands import start_capture, start_player, extract_data, kill_pupil, 
 from file_dir import frame_dir, temp_dir
 
 # starts up the pupil capture application *** NEED TO ADJUST TIMING IN ORDER TO GIVE IT ENOUGHT TIME TO LAUNCH.
+'''
+
 
 print("starting capture", start_capture())
 sleep(10) # waits 10 seconds to fully load capture
@@ -24,7 +26,7 @@ sleep(20)
 
 # kill player once extraction is done
 print("Killing player", kill_pupil('player'))
-
+'''
 # ---------------------- Realtime / video analysis and Image Analysis Split -----------#
 
 '''
@@ -45,7 +47,7 @@ frame_name = grabbingFrame(image_data)
 from Tesseract import Wit, WitVideo
 
 # for image processing
-# Wit.wit_image(frame_name)
+Wit.wit_image(frame_name)
 # sleep(5)
 byebye_data(frame_dir)
 # print("Real-Time data", rt_data)

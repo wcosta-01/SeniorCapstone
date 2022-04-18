@@ -4,7 +4,7 @@ import pytesseract
 import pandas as pd
 from matplotlib import pyplot as plt
 from imutils.object_detection import non_max_suppression
-from file_dir import frame_dir, get_gaze_coords, east_text_det, get_gaze_coords_image
+from file_dir import frame_dir, east_text_det, get_gaze_coords_image
 
 print("Running Wit")
 def east_detect(image):
