@@ -23,7 +23,12 @@ import zmq
 import msgpack
 from time import sleep
 
-# https://docs.pupil-labs.com/developer/core/network-api/#pupil-remote
+'''
+    These lines are from https://docs.pupil-labs.com/developer/core/network-api/#pupil-remote and are used to connect
+    locally to the network-api allowing us to get the live feed from the glasses. This is normally used to connect to 
+    the glasses remotely but in this case we are just using it to have access to the remote controls inorder to allow 
+    us to automate the process.
+'''
 ctx = zmq.Context()
 pupil_remote = zmq.Socket(ctx, zmq.REQ)
 pupil_remote.connect('tcp://127.0.0.1:50020')
@@ -45,7 +50,10 @@ subscriber.connect(f'tcp://{ip}:{sub_port}')
 subscriber.subscribe('gaze.')  # receive all gaze messages
 
 
-
+'''
+    start_stop_recording uses the hotkeys within the Pupil API connection to start and stop a recording within Pupil
+    Capture. It takes in the number of seconds that the recording needs to be and sleeps inbetween pressing start and stop.
+'''
 def start_stop_recording(seconds):  # start recording
     sleep(1)
     pupil_remote.send_string('R')
@@ -54,23 +62,25 @@ def start_stop_recording(seconds):  # start recording
     pupil_remote.send_string('r')
     print("Recording stopping ", pupil_remote.recv_string())
 
-
+'''
+    Export_recording uses powershell commands to press the 'e' key once pupil player is started. This then starts 
+    Pupil players' export process which creates a collection of files based on the data within the initial recording.
+'''
 def export_recoding():
     import os
     sleep(5)
     cmd_command = "powershell ; $wsh = New-Object -ComObject WScript.Shell ; $wsh.SendKeys('{e}')"
     shell_command = 'cmd /c ' + '"' + cmd_command + '"'
     os.system(shell_command)
+    return "Data Exported"
 
 
 '''
-    rt_data_collection or real-time data collection will connect to the pupil remote via local host.
-    Once connected it will then connect a sub port that will pass the data from the glasses to the API,
-    where it will be analysed and then returned to the machine. Then the code gets the desired topic from 
-    the data and returns the coordinates
-    rt_data is where the real-time coordinates are from while the glasses where recording      
+    Data_collection takes in a value for number of seconds that the user would like the recording to be. 
+    It then starts a recording, and connects to the glasses locally to receive a live data feed of the gaze coordinates.
+    It stores that data into a dictionary that can accessed later to compare against the post processed data from 
+    Pupil Player.    
 '''
-
 
 def data_collection(seconds):
     print("Recording for Video and Imaging")

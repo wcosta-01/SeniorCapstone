@@ -5,19 +5,24 @@ from file_dir import gaze_dir
 
 print("Running Frame_selection")
 def frame_Extract(coord_list):
-    avg_dif = np.diff(abs(coord_list))  # finding the difference between each element in the list
-    # We will use this to judge where to split the groups
+    count = 0
     groupNum = 0
-    grouped_frames = {}  # for the frame numbers
+    grouped_frames = {}  # for the world_index(frame numbers)
     grouped_coords = {}  # for the coordinates
+    # Temporary lists that hold individual groups before being added to the dictionaries
     temp_frames = []
     temp_coords = []
-    count = 0
+
+    # Finding the difference between each element in the given list
+    dif_between = np.diff(abs(coord_list))
+    # Getting the first element in the list as an initial Value
     initial_Val = coord_list[0]
+
+
     for key, val in coord_list.items():
         # Find the differences between the initial and the rest of the list.
         if key + 1 != len(coord_list):
-            if abs(avg_dif[count]) >= .2:
+            if abs(dif_between[count]) >= .2:
                 initial_Val = val
                 temp_coords.append(val)
                 temp_frames.append(key)
@@ -31,25 +36,30 @@ def frame_Extract(coord_list):
                 temp_coords.append(val)
                 temp_frames.append(key)
             count += 1
+
+
     # Getting rid of the groups that have fewer than 10 items.
     # Source: https://www.geeksforgeeks.org/python-ways-to-remove-a-key-from-dictionary/
     # stores the world index for the coordinates
     grouped_indexes = {key: val for key, val in grouped_frames.items() if len(val) > 10}
-
     # stores the coordinates
     grouped_coord_vals = {key: val for key, val in grouped_coords.items() if len(val) > 10}
+    # Returning both groups for testing purposes
     return grouped_indexes, grouped_coord_vals
 
-    # return match_up(sorting_groups(grouped_indexes)), grouped_coord_vals
 
-
+'''
+    combines the groups within a dictionary into one big list
+'''
 def mega_list(selected_world):
     world = []
     for key in selected_world:
         world += (selected_world[key])
     return world
 
-
+'''
+    Comparing the x and y world_indexes to see if there are any that match and returning a list of them.
+'''
 def comparing_xy(world_x, world_y):
     matching_indexes = []
     if len(world_x) > len(world_y):

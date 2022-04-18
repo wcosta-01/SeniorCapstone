@@ -32,10 +32,11 @@ test_dir_1280 = recordings_dir + "\\Compare_resolutions\\1280X720\\000\\exports\
 # Real world tests
 rw_dir_1920 = r"C:\Users\deadg\OneDrive\Documents\GithubRep\recordings\pupil_real_world\1280X720\000\exports\000"
 rw_dir_1280 = recordings_dir + "\\pupil_real_world\\1280X720\\000\\exports\\000"
+
 # Just change the folder that is added
 # export_temp_dir is the default temp path
-video_dir = rw_dir_1920 + "\\world.mp4"
-gaze_dir = rw_dir_1920 + "\\gaze_positions.csv"
+video_dir = export_temp_dir + "\\world.mp4"
+gaze_dir = export_temp_dir + "\\gaze_positions.csv"
 
 
 
