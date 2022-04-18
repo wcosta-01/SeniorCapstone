@@ -8,8 +8,6 @@
 """
 from pandas import DataFrame
 
-
-
 """
 This example demonstrates how to send simple messages to the Pupil Remote plugin
     'R' start recording with auto generated session name
