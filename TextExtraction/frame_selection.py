@@ -1,7 +1,7 @@
 import random
 import pandas as pd
 import numpy as np
-from file_dir import gaze_dir
+from file_dir import gaze_dir, results_dir
 
 print("Running Frame_selection")
 def frame_Extract(coord_list):
@@ -109,8 +109,19 @@ matching_indexes = comparing_xy(world_x, world_y)
 
 # a dataframe that contains the matching x and y coordinates
 # This will go to Tesseract video processing
-video_rt_data = gaze_points.iloc[matching_indexes].reset_index(drop=True)
+
+matching_gaze = gaze_points.iloc[matching_indexes].reset_index(drop=True)
+# saving the data just in case
+saved_gaze = results_dir + 'video_rt_data.csv'
+matching_gaze.to_csv(saved_gaze)
+
 
 # This will go to videoFrameCapture
-image_data = int(video_rt_data.iloc[random.randint(0, len(video_rt_data["world_index"]))][0])
-
+# add a check so if there is no frame that is uncommon it defaults ro runs a test again
+try:
+    image_data = int(matching_gaze.iloc[random.randint(0, len(matching_gaze["world_index"]))][0])
+except IndexError:
+    print("Johnson: 'Uh oh?' "
+          "Admin: 'Johnson! WHAT HAPPENED?!'"
+          "Johnson: 'I don't know sir it just broke'"
+          "Admin: 'YOU DON'T KNOW?!?!?! YOUR THE HALF-WIT THAT PROGRAMMED THIS THING, GET BACK TO WORK!'")

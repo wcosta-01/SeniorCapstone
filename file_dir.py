@@ -23,26 +23,27 @@ east_text_det = "C:\\Users\\deadg\\OneDrive\\Documents\\GithubRep\\SeniorCapston
 temp_dir = recordings_dir + "\\Temp"
 temp_recording = recordings_dir + "\\Temp\\000"
 export_temp_dir = temp_recording + "\\exports\\000"
-
+results_dir = recordings_dir + "\\results"
 
 # testing data paths
 test_dir_1920 = recordings_dir + "\\Compare_resolutions\\1920x1080\\000\\exports\\000"
 test_dir_1280 = recordings_dir + "\\Compare_resolutions\\1280X720\\000\\exports\\000"
-
+test_error = r"C:\Users\deadg\OneDrive\Documents\GithubRep\recordings\Temp\Test_error\exports\000"
+standard_test = r"C:\Users\deadg\OneDrive\Documents\GithubRep\recordings\Temp\BleachNaruto\exports\000"
 # Real world tests
 rw_dir_1920 = r"C:\Users\deadg\OneDrive\Documents\GithubRep\recordings\pupil_real_world\1280X720\000\exports\000"
 rw_dir_1280 = recordings_dir + "\\pupil_real_world\\1280X720\\000\\exports\\000"
 
 # Just change the folder that is added
 # export_temp_dir is the default temp path
-video_dir = export_temp_dir + "\\world.mp4"
-gaze_dir = export_temp_dir + "\\gaze_positions.csv"
+video_dir = standard_test + "\\world.mp4"
+gaze_dir = standard_test + "\\gaze_positions.csv"
 
 
 
 def get_gaze_coords_image(h, w):
-    from TextExtraction.frame_selection import video_rt_data
-    df = video_rt_data
+    from TextExtraction.frame_selection import matching_gaze
+    df = matching_gaze
     df["norm_pos_x"] = df["norm_pos_x"] * w
     df["norm_pos_y"] = df["norm_pos_y"] * h
 
@@ -86,3 +87,4 @@ print("This is the recording path", temp_recording, "\n")
 print("This is the frames path", frame_dir, "\n")
 print("This csv file path", gaze_dir, "\n")
 print("The world video path: ", video_dir, "\n")
+print("Saved results can be found here: ", results_dir, "\n")

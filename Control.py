@@ -6,14 +6,13 @@
 from time import sleep
 from cmd_commands import start_capture, start_player, extract_data, kill_pupil, byebye_data
 from file_dir import frame_dir
-
-# starts up the pupil capture application .
+'''
+# starts up the pupil capture application.
 print("starting capture", start_capture())
 sleep(10)
-
 # Starts the recording and saving the data that is received in real-time
 from TextExtraction.real_time_recording import data_collection
-rt_data = data_collection(10)
+data_collection(10)
 
 # Now going to start Pupil Player to export the video and csv files
 sleep(10)
@@ -21,10 +20,11 @@ print("Starting player", start_player())
 sleep(10)
 print("extracting data", extract_data())  # Waits 6 seconds before starting extraction
 sleep(20)
+'''
 
 # kill player and capture once extraction is done
-print("Killing player", kill_pupil('player'))
-print("Killing capture", kill_pupil('capture'))
+#print("Killing player", kill_pupil('player'))
+#print("Killing capture", kill_pupil('capture'))
 
 '''
     ---------------------- Video and Image Analysis ---------------------- 
@@ -46,7 +46,6 @@ frame_name = grabbingFrame(image_data)
     - Wit.py is for images
     - WitVideo.py is for videos 
 '''
-
 from Tesseract import Wit, WitVideo
 # Image processing
 Wit.wit_image(frame_name)

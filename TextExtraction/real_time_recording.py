@@ -105,13 +105,5 @@ def data_collection(seconds):
         numID += 1
         count += 1
 
-        # Getting all the coordinate values into their own lists for calibration
-        # This data will need to be run by tesseract either here or from another method from another file.
-        time_stamps.append(rt_timestamp)
-        point_pox.append(cur_message[0])
-        point_poy.append(cur_message[1])
-        point_poz.append(cur_message[2])
-    rt_data = DataFrame.from_dict(recording_data)
-    return rt_data
 
 
