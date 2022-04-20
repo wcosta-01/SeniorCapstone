@@ -34,9 +34,7 @@ def videoToFrames():
 
     print("Folder populated")
     return 1
-'''
-    Finds the given frame within the /Frames directory and makes a string to then be used to connect the 2
-'''
+
 def grabbingFrame(image_data):
     for file in os.listdir(frame_dir):
         if os.path.isfile(os.path.join(frame_dir, file)):
@@ -51,11 +49,11 @@ def grabbingFrame(image_data):
 # and adding them if there are not any.
 # ---------------------Call this method to run this file
 def frame_check():
-    from TextExtraction.frame_selection import image_data
+    from Collection_Manipulation.frame_selection import image_data
     if dir_not_empty(frame_dir):
-        print("Already contains frames")
+        print("Directory contains frames")
         return grabbingFrame(image_data)
     else:
-        print("No frames on file, populating now")
+        print("No frames in directory, populating now")
         videoToFrames()
         return frame_check()

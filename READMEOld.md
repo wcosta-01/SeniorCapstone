@@ -6,16 +6,18 @@ We test our software in three ways, images, video, and real-time.
 # Pupil Labs
 We have used many of the resources that pupil labs has published along with a few community projects in order to connect this software.
 
+# Tesseract OCR
 
-## File Structure
-We have spilt the program into a collection of files that connect and allow for easy modification. 
-Each file has their own methods that are either ran from within or are called from a Control file.
-The program can be split two sections. The first being data collection or recording, in which the user is wearing the glasses and recording what they are looking at. Then the analysis of the recorded data.
 
-**Programs that Analyse**
-- **Wit.py**: Images
-- **WitVideo.py**: Video
-- **Real-time.py**: Real-time
+## Program Structure
+We have spilt the process into a collection of files that connect and allow for easy modification. Each program has its own methods that are either ran from within the same file or from a Control file.
+The program can be split into a couple different processes. The first being data collection or recording, in which the user is wearing the glasses and recording what they are looking at. Now this is where the program splits into the 3 main parts.
+**Image process**, takes the recording that was just created and extracts data using Pupil Player, this gives us a gaze_position.csv file, and a world.mp4 file. We use the gaze_position.csv file to find the frame of the video in which the user was staring in a general area.
+The world.mp4 file is then split up into individual frames which are stored in a folder called Frames. Then we take the frame number that was calculated from the gaze_position data, and then run that selected frame and its corresponding coordinate data through wit.py. 
+Wit then creates bounding boxes around the text that is within the given frame number. Wit also takes the coordinates and maps them to the image. If the boxes overlap Tesseract is then activated and attempts to read the text within the bounding box.
+
+- **Video process**, works in a similar way by using the extracted video and data from Pupil Player, but instead of an image it is a video. It shows the coordinates being created while the recording is playing and Tesseract reads them as the coordinate boxes overlap with the bounding boxes.
+- **Real-time process**, in theory should work similar to video but in real-time the only issue is that the camera can not be used in 2 places at once. ///stopped here
 
 ### Text Extraction
 Contains all the files needed to collect and manipulate data that can then be used while analysing data.
@@ -62,7 +64,7 @@ Contains three methods, start_stop_recording(), export_recoding(), and data_coll
 ## Tesseract
 Contains the files needed to extract text from images and videos.
 
-### Wit (images)
+### Wit
 Combines East and Tesseract to build bounding boxes around text that is found within the given frame.
 Then takes the cleaned data frame from frame_selection and remaps them to match the Tesseracts
 bounding box grid. If any of the coordinates overlap with a bounding box that contains text, the word is added to a list that is returned one the program has finished.
@@ -72,3 +74,10 @@ Used to process video, by combining East and Tesseract we are able to take the w
 Then we take the raw coordinate data from frame_selection and convert to the Tesseract grid.
 If any of the coordinates overlap with a bounding box that contains text, the word is printed out and saved to a list.
 
+
+
+
+In layman's terms, we look for the point at which the user is not moving their eyes.
+Store the coordinates that are between when the user started looking in that area to when they stopped looking in a list.
+Next we take those lists and find the world_index where all three coordinates are 0.10 units apart and store them in a list.
+Finally, we find the middle most world_index and return that value.

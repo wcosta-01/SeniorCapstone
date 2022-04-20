@@ -4,6 +4,16 @@ import numpy as np
 from file_dir import gaze_dir, results_dir
 
 print("Running Frame_selection")
+
+
+'''
+    Frame_Extract that finds the difference between each value in the given series.
+    If the difference between two elements is greater than 0.2 all the elements before that difference get added to a 
+    dictionary as a group. 
+    - Returns two dictionaries
+        - grouped_indexes:  contains all the world Indexes in groups
+        - grouped_coord_vals: contains all the coordinates in groups
+'''
 def frame_Extract(coord_list):
     count = 0
     groupNum = 0
@@ -86,14 +96,6 @@ point_pox = gaze_points["norm_pos_x"]
 point_poy = gaze_points["norm_pos_y"]
 gaze_points = {"world_index": w_index, "norm_pos_x": point_pox, "norm_pos_y": point_poy}
 gaze_points = pd.DataFrame.from_dict(gaze_points)
-'''
-# For testing purposes
-point_pox_int = gaze_points["gaze_point_3d_x"].astype(int)
-point_poy_int = gaze_points["gaze_point_3d_y"].astype(int)
-point_poz_int = gaze_points["gaze_point_3d_z"].astype(int)
-gaze_points_ints = {"world_index": w_index, "X": point_pox_int, "Y": point_poy_int}
-gaze_points_ints = pd.DataFrame.from_dict(gaze_points_ints)
-'''
 
 # For x
 selected_world_x, selected_coord_x = frame_Extract(point_pox)
@@ -120,6 +122,7 @@ matching_gaze.to_csv(saved_gaze)
 # add a check so if there is no frame that is uncommon it defaults ro runs a test again
 try:
     image_data = int(matching_gaze.iloc[random.randint(0, len(matching_gaze["world_index"]))][0])
+    print(image_data)
 except IndexError:
     print("Johnson: 'Uh oh?' "
           "Admin: 'Johnson! WHAT HAPPENED?!'"

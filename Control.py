@@ -7,6 +7,8 @@ from time import sleep
 from cmd_commands import start_capture, start_player, extract_data, kill_pupil, byebye_data
 from file_dir import frame_dir
 '''
+
+
 # starts up the pupil capture application.
 print("starting capture", start_capture())
 sleep(10)
@@ -15,16 +17,16 @@ from TextExtraction.real_time_recording import data_collection
 data_collection(10)
 
 # Now going to start Pupil Player to export the video and csv files
-sleep(10)
+sleep(7)
 print("Starting player", start_player())
-sleep(10)
+sleep(7)
 print("extracting data", extract_data())  # Waits 6 seconds before starting extraction
-sleep(20)
+sleep(15)
 '''
 
 # kill player and capture once extraction is done
-#print("Killing player", kill_pupil('player'))
-#print("Killing capture", kill_pupil('capture'))
+print("Killing player", kill_pupil('player'))
+print("Killing capture", kill_pupil('capture'))
 
 '''
     ---------------------- Video and Image Analysis ---------------------- 

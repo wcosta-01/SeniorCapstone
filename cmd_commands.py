@@ -4,8 +4,6 @@
 '''
 import file_dir
 import os
-from time import sleep
-
 
 # Path that links to the exported World.mp4 file.
 video_dir = file_dir.video_dir
@@ -22,8 +20,9 @@ def start_capture():
     cap = 'cmd /c ' + '"' + cap_command + '"'
     os.system(cap)
     return " capture started"
-#opens player with a give recording directory
-# may take a few seconds to load
+
+
+# Opens player with a given recording directory
 def start_player():
     play_command = " cd " + play_dir + " & start pupil_player.exe "
     add_dir = play_command + record_folder
@@ -33,16 +32,16 @@ def start_player():
 '''
     Takes any pupil exe file and kills it.
     input = player or capture
-    returns string explaining exicution
+    returns string explaining execution
 '''
 def kill_pupil(input):
-    if input != 'capture' or input != 'player':
-        return "input incorrect must be player or capture"
-    else:
+    if input == 'capture' or input == 'player':
         kill_command = "taskkill/im pupil_" + input + ".exe"
         kill = 'cmd /c ' + '"' + kill_command + '"'
         os.system(kill)
-        return "Application killed"
+        return input, " Terminated"
+    else:
+        return "input incorrect must be player or capture"
 
 
 # Extracts the data from player
@@ -67,7 +66,7 @@ def byebye_data(input_dir):
             else:  # if the dir is a folder
                 del_command = r"echo y | rmdir /s " + file
             # Adding the delete command to the end of the cd command to get to the directory.
-            # cmd_command = "cd C:\\Users\\deadg\\OneDrive\\Documents\\GithubRep\\SeniorCapstone\\TextExtraction\\Frames &" + del_command
+            # cmd_command = "cd C:\\Users\\deadg\\OneDrive\\Documents\\GithubRep\\SeniorCapstone\\Collection_Manipulation\\Frames &" + del_command
             cmd_command = " cd " + input_dir + " & " + del_command
 
             # CMD /K – execute a command and then remain:

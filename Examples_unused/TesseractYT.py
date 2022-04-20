@@ -162,7 +162,7 @@ def wordthree():
 
 def startvideofeed():
     # Video feed
-    video = cv2.VideoCapture("C:/Users/deadg/OneDrive/Documents/GithubRep/SeniorCapstone/TextExtraction/ExportedData/OldTestData/world.mp4")
+    video = cv2.VideoCapture("C:/Users/deadg/OneDrive/Documents/GithubRep/SeniorCapstone/Collection_Manipulation/ExportedData/OldTestData/world.mp4")
 
     # Setting width and height for video feed
     video.set(3, 640)
@@ -197,7 +197,7 @@ def startvideofeed():
 
 def startimagefeed():
     # Video feed
-    video = cv2.VideoCapture("C:/Users/deadg/OneDrive/Documents/GithubRep/SeniorCapstone/TextExtraction/ExportedData/OldTestData/world.mp4")
+    video = cv2.VideoCapture("C:/Users/deadg/OneDrive/Documents/GithubRep/SeniorCapstone/Collection_Manipulation/ExportedData/OldTestData/world.mp4")
 
     # Setting width and height for video feed
     video.set(3, 640)

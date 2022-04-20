@@ -1,19 +1,22 @@
 '''
-    This file contains all of the file paths across the entire program. All you have to do is change a path here and it
-    it changes everywhere.
+    This file contains all of the file paths across the entire program.
+    All you have to do is change a path here and it
+    changes everywhere.
+
+    Reach run it also prints out The directories that are being used in that specific run.
+
 
 Sources and helpfull links
     https://datatofish.com/command-prompt-python/
     https://pynative.com/python-count-number-of-files-in-a-directory/
 '''
-# Paths for running the pupil programs for cmd commands
 
 
+# Paths for running the Pupil software for cmd commands
 cap_dir = "C:\\Program Files (x86)\\Pupil-Labs\\Pupil v3.5.1\\Pupil Capture v3.5.1"
 play_dir = "C:\\Program Files (x86)\\Pupil-Labs\\Pupil v3.5.1\\Pupil Player v3.5.1"
 
 # Path for all the created frames when video is split up in VideoFrameCapture.py
-import pandas as pd
 githubRep = "C:\\Users\\deadg\\OneDrive\\Documents\\GithubRep\\SeniorCapstone"
 frame_dir = githubRep + "\\TextExtraction\\Frames"
 recordings_dir = "C:\\Users\\deadg\\OneDrive\\Documents\\GithubRep\\recordings"
@@ -39,6 +42,7 @@ rw_dir_1280 = recordings_dir + "\\pupil_real_world\\1280X720\\000\\exports\\000"
 video_dir = standard_test + "\\world.mp4"
 gaze_dir = standard_test + "\\gaze_positions.csv"
 
+import pandas as pd
 
 
 def get_gaze_coords_image(h, w):
@@ -53,6 +57,7 @@ def get_gaze_coords_image(h, w):
     # df.drop_duplicates(subset = "world_index", keep = "first", inplace=False)
 
     return df.values.tolist()
+
 
 def get_gaze_coords_vid(h, w):
     columns = ["world_index", "norm_pos_x", "norm_pos_y"]
@@ -69,7 +74,8 @@ def get_gaze_coords_vid(h, w):
 
     return df.values.tolist()
 
-def get_gaze_coords_rt(h,w, norm_pos):
+
+def get_gaze_coords_rt(h, w, norm_pos):
     # pos_x =0 pos_y =1
     norm_pos[0] = norm_pos[0] * w
     norm_pos[1] = norm_pos[1] * h
