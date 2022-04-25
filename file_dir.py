@@ -22,6 +22,13 @@ frame_dir = githubRep + "\\TextExtraction\\Frames"
 recordings_dir = "C:\\Users\\deadg\\OneDrive\\Documents\\GithubRep\\recordings"
 east_text_det = "C:\\Users\\deadg\\OneDrive\\Documents\\GithubRep\\SeniorCapstone\\Tesseract\\frozen_east_text_detection.pb"
 
+# Path for the CRAFT implementation
+craft_dir = githubRep + "\\CRAFT-pytorch-master"
+selected_frame_dir = craft_dir + "\\selected"
+craft_results = craft_dir + "\\result" # for the generated results images and txt files
+
+
+
 # Paths to all the temporary data that will be created once program is ran
 temp_dir = recordings_dir + "\\Temp"
 temp_recording = recordings_dir + "\\Temp\\000"

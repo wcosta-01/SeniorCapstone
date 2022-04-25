@@ -72,4 +72,3 @@ Used to process video, by combining East and Tesseract we are able to take the w
 Then we take the raw coordinate data     from frame_selection and convert to the Tesseract grid.
 If any of the coordinates overlap with a bounding box that contains text, the word is printed out and saved to a list.
 
-        

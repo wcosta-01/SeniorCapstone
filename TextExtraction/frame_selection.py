@@ -25,7 +25,7 @@ def frame_Extract(coord_list):
 
     # Finding the difference between each element in the given list
     dif_between = np.diff(abs(coord_list))
-    print(dif_between)
+    # print(dif_between)
     # Getting the first element in the list as an initial Value
     initial_Val = coord_list[0]
 

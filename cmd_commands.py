@@ -13,7 +13,22 @@ cap_dir = file_dir.cap_dir
 play_dir = file_dir.play_dir
 # Used to link the recording that will be exported in pupil player
 record_folder = file_dir.temp_recording
-
+# frames directory
+frame_dir = file_dir.frame_dir
+# craft directories
+craft_dir = file_dir.craft_dir
+craft_results = file_dir.craft_results
+selected_frame_dir = file_dir.selected_frame_dir
+# command for running CRAFT
+def craft_image(frame_name):
+    # Craft requires a lot of other stuff to run it properly. I advise testing it on its own before tying it into this program.
+    # Here is their git hub: https://github.com/clovaai/CRAFT-pytorch We made very minor changes to the code in order to run it.
+    craft_command = "cd " + craft_dir
+    move_image = craft_command + " & move " + frame_dir + "\\" + frame_name + " " + selected_frame_dir
+    run_command = move_image + " & py -m test --test_folder=" + selected_frame_dir
+    cmd = 'cmd /c '+ '"' + run_command + '"'
+    os.system(cmd)
+    return " craft getting crafty"
 
 def start_capture():
     cap_command = "cd " + cap_dir + " & start pupil_capture.exe"

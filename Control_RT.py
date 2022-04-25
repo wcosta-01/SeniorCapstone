@@ -10,7 +10,7 @@ sleep(10) # waits 10 seconds to fully load capture
 
 # Starts the recording and saving the data that is received in real-time
 from Real_Time import rt_data_collection
-rt_data_collection(1080, 1920)
+rt_data_collection(720, 1280)
 
 
 
