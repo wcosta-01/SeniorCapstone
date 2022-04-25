@@ -73,8 +73,8 @@ def decode_predictions(scores, geometry):
 def wit_video():
 
     pytesseract.pytesseract.tesseract_cmd = "C:\\Program Files\\Tesseract-OCR\\tesseract.exe"
-    R_wid = 1920
-    R_hig = 1080
+    R_wid = 1280
+    R_hig = 720
     # For the video the resolution is flipped
     toCheck = get_gaze_coords_vid(R_hig, R_wid)
 
@@ -185,3 +185,4 @@ def wit_video():
     vs.release()
     # close all windows
     cv2.destroyAllWindows()
+

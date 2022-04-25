@@ -49,7 +49,7 @@ def grabbingFrame(image_data):
 # and adding them if there are not any.
 # ---------------------Call this method to run this file
 def frame_check():
-    from Collection_Manipulation.frame_selection import image_data
+    from TextExtraction.frame_selection import image_data
     if dir_not_empty(frame_dir):
         print("Directory contains frames")
         return grabbingFrame(image_data)

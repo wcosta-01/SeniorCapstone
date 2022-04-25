@@ -69,6 +69,7 @@ bounding box grid. If any of the coordinates overlap with a bounding box that co
 
 ### Wit Video
 Used to process video, by combining East and Tesseract we are able to take the world.mp4 file from the Pupil recording and create bounding boxes around the text that show up in the video.
-Then we take the raw coordinate data from frame_selection and convert to the Tesseract grid.
+Then we take the raw coordinate data     from frame_selection and convert to the Tesseract grid.
 If any of the coordinates overlap with a bounding box that contains text, the word is printed out and saved to a list.
 
+        

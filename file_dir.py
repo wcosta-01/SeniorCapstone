@@ -26,6 +26,9 @@ east_text_det = "C:\\Users\\deadg\\OneDrive\\Documents\\GithubRep\\SeniorCapston
 temp_dir = recordings_dir + "\\Temp"
 temp_recording = recordings_dir + "\\Temp\\000"
 export_temp_dir = temp_recording + "\\exports\\000"
+
+
+
 results_dir = recordings_dir + "\\results"
 
 # testing data paths
@@ -39,8 +42,8 @@ rw_dir_1280 = recordings_dir + "\\pupil_real_world\\1280X720\\000\\exports\\000"
 
 # Just change the folder that is added
 # export_temp_dir is the default temp path
-video_dir = standard_test + "\\world.mp4"
-gaze_dir = standard_test + "\\gaze_positions.csv"
+video_dir = export_temp_dir + "\\world.mp4"
+gaze_dir = export_temp_dir + "\\gaze_positions.csv"
 
 import pandas as pd
 

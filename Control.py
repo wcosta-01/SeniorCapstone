@@ -6,8 +6,6 @@
 from time import sleep
 from cmd_commands import start_capture, start_player, extract_data, kill_pupil, byebye_data
 from file_dir import frame_dir
-'''
-
 
 # starts up the pupil capture application.
 print("starting capture", start_capture())
@@ -22,12 +20,16 @@ print("Starting player", start_player())
 sleep(7)
 print("extracting data", extract_data())  # Waits 6 seconds before starting extraction
 sleep(15)
-'''
+
 
 # kill player and capture once extraction is done
-print("Killing player", kill_pupil('player'))
-print("Killing capture", kill_pupil('capture'))
-
+'''
+try:
+    print("Killing player", kill_pupil('player'))
+    print("Killing capture", kill_pupil('capture'))
+except :
+    print("failed to kill player or capture")
+'''
 '''
     ---------------------- Video and Image Analysis ---------------------- 
     Now that the data has been extracted, we can run the image and video
