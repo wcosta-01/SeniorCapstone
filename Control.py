@@ -7,7 +7,7 @@ from time import sleep
 from cmd_commands import start_capture, start_player, extract_data, kill_pupil, byebye_data, craft_image
 from file_dir import frame_dir, selected_frame_dir
 
-
+'''
 # starts up the pupil capture application.
 print("starting capture", start_capture())
 sleep(10)
@@ -23,7 +23,7 @@ print("extracting data", extract_data())  # Waits 6 seconds before starting extr
 sleep(15)
 
 # kill player and capture once extraction is done
-'''
+
 try:
     print("Killing player", kill_pupil('player'))
     print("Killing capture", kill_pupil('capture'))
@@ -55,7 +55,7 @@ from Tesseract import Wit, WitVideo
 Wit.wit_image(frame_name)
 
 # Image processing with Craft
-print(craft_image(frame_name))
+# print(craft_image(frame_name))
 
 sleep(5)
 

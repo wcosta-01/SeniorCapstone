@@ -25,7 +25,7 @@ east_text_det = "C:\\Users\\deadg\\OneDrive\\Documents\\GithubRep\\SeniorCapston
 # Path for the CRAFT implementation
 craft_dir = githubRep + "\\CRAFT-pytorch-master"
 selected_frame_dir = craft_dir + "\\selected"
-craft_results = craft_dir + "\\result" # for the generated results images and txt files
+results_dir = craft_dir + "\\result" # for the generated results images and txt files
 
 
 
@@ -36,7 +36,7 @@ export_temp_dir = temp_recording + "\\exports\\000"
 
 
 
-results_dir = recordings_dir + "\\results"
+# results_dir = recordings_dir + "\\results"
 
 # testing data paths
 test_dir_1920 = recordings_dir + "\\Compare_resolutions\\1920x1080\\000\\exports\\000"
@@ -49,8 +49,8 @@ rw_dir_1280 = recordings_dir + "\\pupil_real_world\\1280X720\\000\\exports\\000"
 
 # Just change the folder that is added
 # export_temp_dir is the default temp path
-video_dir = export_temp_dir + "\\world.mp4"
-gaze_dir = export_temp_dir + "\\gaze_positions.csv"
+video_dir = rw_dir_1920 + "\\world.mp4"
+gaze_dir = rw_dir_1920 + "\\gaze_positions.csv"
 
 import pandas as pd
 

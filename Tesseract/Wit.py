@@ -104,14 +104,6 @@ def east_detect(image):
         cv2.rectangle(orig, (startX, startY), (endX, endY), (0, 255, 0), 2)
 
     return orig, newRects
-'''
-# Returns a list of all comparable values; Will you need to change this
-def get_gaze_coords(h, w):
-    video_rt_data["X"] = video_rt_data["X"].astype(int) + int(w/2)
-    video_rt_data["Y"] = video_rt_data["Y"].astype(int) + int(h/2)
-
-    return video_rt_data.values.tolist()
-'''
 
 def wit_image(frame_name):
     pytesseract.pytesseract.tesseract_cmd = "C:\\Program Files\\Tesseract-OCR\\tesseract.exe"
@@ -122,10 +114,12 @@ def wit_image(frame_name):
 
     # Preprocessing for the image, binarizing it
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    blurred = cv2.GaussianBlur(gray, (7, 7), 0)
-    thresh = cv2.adaptiveThreshold(blurred, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 21, 4)
-    
-    orig, newRects = east_detect(thresh)
+    blurred = cv2.GaussianBlur(gray, (5, 5), 0)
+    _ , binary = cv2.threshold(blurred, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
+    if np.mean(binary) < 127:
+        binary = cv2.bitwise_not(binary)
+
+    orig, newRects = east_detect(binary)
 
     toCheck = get_gaze_coords_image(h, w)
 

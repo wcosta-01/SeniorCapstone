@@ -165,8 +165,10 @@ def wit_video():
                 if(newBound[0] < endX and newBound[2] > startX and newBound[1] < endY and newBound[3] > startY):
                     r = orig[startY:endY, startX:endX]
                     r = cv2.cvtColor(r, cv2.COLOR_BGR2GRAY)
-                    r = cv2.GaussianBlur(r, (7, 7), 0)
-                    r = cv2.adaptiveThreshold(r, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 21, 4)
+                    r = cv2.GaussianBlur(r, (5, 5), 0)
+                    _, r = cv2.threshold(r, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
+                    if np.mean(r) < 127:
+                        r = cv2.bitwise_not(r)
                     text = pytesseract.image_to_string(r)
                     cv2.putText(frame, text, (newBound[0], newBound[1]), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0,0,255), 2)
                     print(text)
