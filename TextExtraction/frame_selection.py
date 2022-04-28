@@ -1,7 +1,7 @@
 import random
 import pandas as pd
 import numpy as np
-from file_dir import gaze_dir, results_dir
+from file_dir import gaze_dir, result_dir
 
 print("Running Frame_selection")
 
@@ -114,20 +114,21 @@ while True:
     # This will go to Tesseract video processing
 
     matching_gaze = gaze_points.iloc[matching_indexes].reset_index(drop=True)
-    # saving the data just in case
-    saved_gaze = results_dir + 'video_rt_data.csv'
-    matching_gaze.to_csv(saved_gaze)
+
 
 
     # This will go to videoFrameCapture
     # add a check so if there is no frame that is uncommon it defaults ro runs a test again
     try:
         image_data = int(matching_gaze.iloc[random.randint(0, len(matching_gaze["world_index"]))][0])
-        print(image_data)
+
     except IndexError:
         print("Johnson: 'Uh oh?' "
               "Admin: 'Johnson! WHAT HAPPENED?!'"
               "Johnson: 'I don't know sir it just broke'"
               "Admin: 'YOU DON'T KNOW?!?!?! YOUR THE HALF-WIT THAT PROGRAMMED THIS THING, GET BACK TO WORK!'")
     if (image_data > 20):
+        # saving the data just in case
+        saved_gaze = result_dir + "\\" + "cleaned_data_" + str(image_data) + ".csv"
+        matching_gaze.to_csv(saved_gaze)
         break

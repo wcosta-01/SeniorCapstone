@@ -28,6 +28,10 @@ import zipfile
 from craft import CRAFT
 
 from collections import OrderedDict
+
+
+
+print("Running CRAFT")
 def copyStateDict(state_dict):
     if list(state_dict.keys())[0].startswith("module"):
         start_idx = 1
@@ -58,14 +62,14 @@ parser.add_argument('--refiner_model', default='weights/craft_refiner_CTW1500.pt
 
 args = parser.parse_args()
 
-
 """ For test images in a folder """
 image_list, _, _ = file_utils.get_files(args.test_folder)
 
-result_folder = './result/'
+result_folder = r'C:\Users\deadg\OneDrive\Documents\GithubRep\SeniorCapstone\results'
+'''
 if not os.path.isdir(result_folder):
     os.mkdir(result_folder)
-
+'''
 def test_net(net, image, text_threshold, link_threshold, low_text, cuda, poly, refine_net=None):
     t0 = time.time()
 
@@ -166,6 +170,6 @@ if __name__ == '__main__':
         mask_file = result_folder + "/res_" + filename + '_mask.jpg'
         cv2.imwrite(mask_file, score_text)
 
-        file_utils.saveResult(image_path, image[:,:,::-1], polys, dirname=result_folder)
+        file_utils.saveResult(image_path, image[:,:,::-1], polys, dirname=(result_folder + "\\"))
 
     print("elapsed time : {}s".format(time.time() - t))

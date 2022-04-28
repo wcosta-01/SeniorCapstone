@@ -70,11 +70,11 @@ def decode_predictions(scores, geometry):
         # return a tuple of the bounding boxes and associated confidences
     return (rects, confidences)
 
+# if __name__ == '__main__':
 def wit_video():
-
     pytesseract.pytesseract.tesseract_cmd = "C:\\Program Files\\Tesseract-OCR\\tesseract.exe"
-    R_wid = 1280
-    R_hig = 720
+    R_wid = 1920
+    R_hig = 1080
     # For the video the resolution is flipped
     toCheck = get_gaze_coords_vid(R_hig, R_wid)
 
@@ -102,6 +102,11 @@ def wit_video():
     vs = cv2.VideoCapture(video_dir)
 
     index = 0
+
+    # Variables for storing output
+    word = " "
+    words = []
+
     # loop over frames from the video stream
     while True:
         # grab the current frame, then handle if we are using a
@@ -146,7 +151,7 @@ def wit_video():
 
         newBound = [x - 15, y - 15, x + 15, y + 15]
 
-        cv2.rectangle(orig, (int(newBound[0]), int(newBound[1])), (int(newBound[2]), int(newBound[3])), (0, 255, 0), 2)
+        # cv2.rectangle(orig, (int(newBound[0]), int(newBound[1])), (int(newBound[2]), int(newBound[3])), (0, 255, 0), 2)
 
         # loop over the bounding boxes
         for (startX, startY, endX, endY) in boxes:
@@ -160,7 +165,7 @@ def wit_video():
                 # draw the bounding box on the frame
                 # print(startX, startY, endX, endY)
                 # Add padding
-                cv2.rectangle(orig, (startX, startY), (endX, endY), (0, 255, 0), 2)
+                # cv2.rectangle(orig, (startX, startY), (endX, endY), (0, 255, 0), 2)
 
                 if(newBound[0] < endX and newBound[2] > startX and newBound[1] < endY and newBound[3] > startY):
                     r = orig[startY:endY, startX:endX]
@@ -169,9 +174,17 @@ def wit_video():
                     _, r = cv2.threshold(r, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
                     if np.mean(r) < 127:
                         r = cv2.bitwise_not(r)
-                    text = pytesseract.image_to_string(r)
+                    # text = pytesseract.image_to_string(r)
+                    text = pytesseract.image_to_string(r, config='--psm 10')
                     cv2.putText(frame, text, (newBound[0], newBound[1]), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0,0,255), 2)
                     print(text)
+
+
+                    if word != text:
+                        final_text = text.replace("\n", "")
+                        words.append(final_text)
+                        word = text
+                    break
         # show the output frame
         cv2.imshow("Text Detection", orig)
         key = cv2.waitKey(1) & 0xFF
@@ -179,12 +192,15 @@ def wit_video():
         if key == ord("q"):
             break
         index += 1
-
+    vid_series_results = pd.Series(words, dtype="string")
+    # just return vid_series_results
+    return vid_series_results
     # if we are using a webcam, release the pointer
-    # if not args.get("video", False):
-    #     vs.stop()
+    #if not args.get("video", False):
+       #vs.stop()
     # otherwise, release the file pointer
     vs.release()
     # close all windows
     cv2.destroyAllWindows()
+
 

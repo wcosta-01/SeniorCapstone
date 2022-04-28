@@ -23,9 +23,10 @@ recordings_dir = "C:\\Users\\deadg\\OneDrive\\Documents\\GithubRep\\recordings"
 east_text_det = "C:\\Users\\deadg\\OneDrive\\Documents\\GithubRep\\SeniorCapstone\\Tesseract\\frozen_east_text_detection.pb"
 
 # Path for the CRAFT implementation
-craft_dir = githubRep + "\\CRAFT-pytorch-master"
+craft_dir = r"C:\Users\deadg\OneDrive\Documents\GithubRep\SeniorCapstone\CRAFT-pytorch-master"
 selected_frame_dir = craft_dir + "\\selected"
-results_dir = craft_dir + "\\result" # for the generated results images and txt files
+result_dir = githubRep + "\\results"
+# for the generated results images and txt files
 
 
 
@@ -33,8 +34,6 @@ results_dir = craft_dir + "\\result" # for the generated results images and txt 
 temp_dir = recordings_dir + "\\Temp"
 temp_recording = recordings_dir + "\\Temp\\000"
 export_temp_dir = temp_recording + "\\exports\\000"
-
-
 
 # results_dir = recordings_dir + "\\results"
 
@@ -47,10 +46,23 @@ standard_test = r"C:\Users\deadg\OneDrive\Documents\GithubRep\recordings\Temp\Bl
 rw_dir_1920 = r"C:\Users\deadg\OneDrive\Documents\GithubRep\recordings\pupil_real_world\1280X720\000\exports\000"
 rw_dir_1280 = recordings_dir + "\\pupil_real_world\\1280X720\\000\\exports\\000"
 
+# Michael's Sign Tests
+cal_michaels_1920 = r"C:\Users\deadg\OneDrive\Documents\GithubRep\recordings\Michael'sTests\cal_michaels_1920X1080\000\exports\000"
+michaels_1280 = r"C:\Users\deadg\OneDrive\Documents\GithubRep\recordings\Michael'sTests\michaels_1280X720\000\exports\000"
+michaels_1920 = r"C:\Users\deadg\OneDrive\Documents\GithubRep\recordings\Michael'sTests\michaels_1920X1080\000\exports\000"
+michaels_1920_drone = r"C:\Users\deadg\OneDrive\Documents\GithubRep\recordings\Michael'sTests\wdrone_michaels_1920X1080\000\exports\000"
+
+# Language Tests
+lang_1280 = r"C:\Users\deadg\OneDrive\Documents\GithubRep\recordings\Pupil_rl_Languages\1280_rl_world_language\000\exports\000"
+lang_1920 = r"C:\Users\deadg\OneDrive\Documents\GithubRep\recordings\Pupil_rl_Languages\1920_rl_world_language\000\exports\000"
+
+
+
+
 # Just change the folder that is added
 # export_temp_dir is the default temp path
-video_dir = rw_dir_1920 + "\\world.mp4"
-gaze_dir = rw_dir_1920 + "\\gaze_positions.csv"
+video_dir = standard_test + "\\world.mp4"
+gaze_dir = standard_test + "\\gaze_positions.csv"
 
 import pandas as pd
 
@@ -80,7 +92,7 @@ def get_gaze_coords_vid(h, w):
     df["norm_pos_y"] = df["norm_pos_y"].astype(int)
     df["norm_pos_y"] = h - df["norm_pos_y"]
 
-    df = df.drop_duplicates(subset=["world_index"]).reset_index(drop=True)
+    #df = df.drop_duplicates(subset=["world_index"]).reset_index(drop=True)
 
     return df.values.tolist()
 
@@ -103,4 +115,4 @@ print("This is the recording path", temp_recording, "\n")
 print("This is the frames path", frame_dir, "\n")
 print("This csv file path", gaze_dir, "\n")
 print("The world video path: ", video_dir, "\n")
-print("Saved results can be found here: ", results_dir, "\n")
+print("Saved results can be found here: ", result_dir, "\n")

@@ -6,7 +6,7 @@ from matplotlib import pyplot as plt
 from imutils.object_detection import non_max_suppression
 from file_dir import frame_dir, east_text_det, get_gaze_coords_image
 
-print("Running Wit")
+print("Running Wit, this might take a moment")
 def east_detect(image):
     layerNames = [
         "feature_fusion/Conv_7/Sigmoid",
@@ -101,14 +101,13 @@ def east_detect(image):
         # print(text)
 
         # draw the bounding box on the image
-        cv2.rectangle(orig, (startX, startY), (endX, endY), (0, 255, 0), 2)
+        # cv2.rectangle(orig, (startX, startY), (endX, endY), (0, 255, 0), 2)
 
     return orig, newRects
 
 def wit_image(frame_name):
     pytesseract.pytesseract.tesseract_cmd = "C:\\Program Files\\Tesseract-OCR\\tesseract.exe"
     frame = frame_dir + "\\" + frame_name
-
     img = cv2.imread(frame)
     h, w = img.shape[:2]
 
@@ -135,7 +134,7 @@ def wit_image(frame_name):
         # y = int(-75.8148250095352 + (h/2))
         newBound = [x - 50, y - 50, x + 50, y + 50]
         # cv2.rectangle(orig, (newBound[0], newBound[1]), (newBound[2], newBound[3]), (0, 255, 0), 2)
-        cv2.rectangle(orig, (int(newBound[0]), int(newBound[1])), (int(newBound[2]), int(newBound[3])), (0, 255, 0), 2)
+        # cv2.rectangle(orig, (int(newBound[0]), int(newBound[1])), (int(newBound[2]), int(newBound[3])), (0, 255, 0), 2)
 
         for j in range(len(newRects)):
             # If one rectangle is on left side of other
@@ -144,18 +143,21 @@ def wit_image(frame_name):
             else: 
                 # print(toCheck[i][0])
                 r = orig[newRects[j][1]:newRects[j][3], newRects[j][0]:newRects[j][2]]
-                text = pytesseract.image_to_string(r)
+                # text = pytesseract.image_to_string(r)
+                text = pytesseract.image_to_string(r, config='--psm 10')
 
                 if word != text:
-                    words.append(text)
+                    final_text = text.replace("\n", "")
+                    words.append(final_text)
                     word = text
-
                 break
-    print(words)
+
+    # fix img_results prints it out as characters haha
+    img_results = pd.Series(words, dtype="string") # issue with needing to define the dtype
     im = plt.imshow(orig)
     plt.show()
     # orig.savefig(r'C:\Users\deadg\OneDrive\Documents\GithubRep\recordings\results\saved_plot.png', dpi=100)
-    return words
+    return img_results
 
 # Shout out to this guy. Now let's do it in real time
 # https://medium.com/technovators/scene-text-detection-in-python-with-east-and-craft-cbe03dda35d5

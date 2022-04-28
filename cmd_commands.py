@@ -17,18 +17,19 @@ record_folder = file_dir.temp_recording
 frame_dir = file_dir.frame_dir
 # craft directories
 craft_dir = file_dir.craft_dir
-results_dir = file_dir.results_dir
+results_dir = file_dir.result_dir
 selected_frame_dir = file_dir.selected_frame_dir
 # command for running CRAFT
-def craft_image(frame_name):
+
+def get_craft_image(frame_name):
     # Craft requires a lot of other stuff to run it properly. I advise testing it on its own before tying it into this program.
     # Here is their git hub: https://github.com/clovaai/CRAFT-pytorch We made very minor changes to the code in order to run it.
-    craft_command = "cd " + results_dir
+    craft_command = "cd " + craft_dir
     move_image = craft_command + " & move " + frame_dir + "\\" + frame_name + " " + selected_frame_dir
-    run_command = move_image + " & py -m test --test_folder=" + selected_frame_dir
+    run_command = move_image + " & py test.py --test_folder=" + selected_frame_dir
     cmd = 'cmd /c '+ '"' + run_command + '"'
     os.system(cmd)
-    return " craft getting crafty"
+    return " CRAFT results Generated"
 
 def start_capture():
     cap_command = "cd " + cap_dir + " & start pupil_capture.exe"

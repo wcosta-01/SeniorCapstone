@@ -4,9 +4,12 @@
 '''
 
 from time import sleep
-from cmd_commands import start_capture, start_player, extract_data, kill_pupil, byebye_data, craft_image
-from file_dir import frame_dir, selected_frame_dir
-
+from cmd_commands import start_capture, start_player, extract_data, kill_pupil, byebye_data, get_craft_image
+from file_dir import frame_dir, selected_frame_dir, result_dir
+# removing data from holding directories
+byebye_data(frame_dir)
+byebye_data(selected_frame_dir)
+byebye_data(result_dir)
 '''
 # starts up the pupil capture application.
 print("starting capture", start_capture())
@@ -42,28 +45,34 @@ from TextExtraction.VideoFrameCapture import frame_check, grabbingFrame
 frame_check()
 # Assigning the selected frame to a variable that is then passed to Wit for image processing
 frame_name = grabbingFrame(image_data)
-
+print(frame_name)
 '''
     ---------------------- Visualization of Analysis ----------------------
     Once the data has been sorted and organized we can then see the comparison
     between the video and the imaging processing. 
     - Wit.py is for images
     - WitVideo.py is for videos 
+    - get_crafty
 '''
-from Tesseract import Wit, WitVideo
+from Tesseract import Wit
 # Image processing
-Wit.wit_image(frame_name)
+img_results = Wit.wit_image(frame_name)
 
 # Image processing with Craft
-# print(craft_image(frame_name))
+print(get_craft_image(frame_name))
+from Tesseract import get_crafty
+crafty_results = get_crafty.craft_image(frame_name)
 
 sleep(5)
 
+# removing data from Frame directory and from selected directory
 byebye_data(selected_frame_dir)
 byebye_data(frame_dir)
 
+from Tesseract import WitVideo
 # Video processing
-WitVideo.wit_video()
+vid_results = WitVideo.wit_video()
 
 #sleep(60)
 #byebye_data(temp_dir)
+print("All done, Goodbye!")
