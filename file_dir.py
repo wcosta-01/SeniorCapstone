@@ -13,6 +13,8 @@ Sources and helpfull links
 
 
 # Paths for running the Pupil software for cmd commands
+import os.path
+
 cap_dir = "C:\\Program Files (x86)\\Pupil-Labs\\Pupil v3.5.1\\Pupil Capture v3.5.1"
 play_dir = "C:\\Program Files (x86)\\Pupil-Labs\\Pupil v3.5.1\\Pupil Player v3.5.1"
 
@@ -26,18 +28,10 @@ east_text_det = "C:\\Users\\deadg\\OneDrive\\Documents\\GithubRep\\SeniorCapston
 craft_dir = r"C:\Users\deadg\OneDrive\Documents\GithubRep\SeniorCapstone\CRAFT-pytorch-master"
 selected_frame_dir = craft_dir + "\\selected"
 result_dir = githubRep + "\\results"
-# for the generated results images and txt files
 
-
-
-# Paths to all the temporary data that will be created once program is ran
-temp_dir = recordings_dir + "\\Temp"
-temp_recording = recordings_dir + "\\Temp\\000"
-export_temp_dir = temp_recording + "\\exports\\000"
-
-# results_dir = recordings_dir + "\\results"
-
-# testing data paths
+# Testing data paths
+eng_signs_1920 = r"C:\Users\deadg\OneDrive\Documents\GithubRep\recordings\Temp\eng_sign_1920\exports\000"
+slapYaMama_1280 = r"C:\Users\deadg\OneDrive\Documents\GithubRep\recordings\Temp\SlapYaMama\exports\000"
 test_dir_1920 = recordings_dir + "\\Compare_resolutions\\1920x1080\\000\\exports\\000"
 test_dir_1280 = recordings_dir + "\\Compare_resolutions\\1280X720\\000\\exports\\000"
 test_error = r"C:\Users\deadg\OneDrive\Documents\GithubRep\recordings\Temp\Test_error\exports\000"
@@ -45,7 +39,7 @@ standard_test = r"C:\Users\deadg\OneDrive\Documents\GithubRep\recordings\Temp\Bl
 # Real world tests
 rw_dir_1920 = r"C:\Users\deadg\OneDrive\Documents\GithubRep\recordings\pupil_real_world\1280X720\000\exports\000"
 rw_dir_1280 = recordings_dir + "\\pupil_real_world\\1280X720\\000\\exports\\000"
-
+red_bull_can = r"C:\Users\deadg\OneDrive\Documents\GithubRep\recordings\Temp\rebullCan\exports\000"
 # Michael's Sign Tests
 cal_michaels_1920 = r"C:\Users\deadg\OneDrive\Documents\GithubRep\recordings\Michael'sTests\cal_michaels_1920X1080\000\exports\000"
 michaels_1280 = r"C:\Users\deadg\OneDrive\Documents\GithubRep\recordings\Michael'sTests\michaels_1280X720\000\exports\000"
@@ -56,16 +50,16 @@ michaels_1920_drone = r"C:\Users\deadg\OneDrive\Documents\GithubRep\recordings\M
 lang_1280 = r"C:\Users\deadg\OneDrive\Documents\GithubRep\recordings\Pupil_rl_Languages\1280_rl_world_language\000\exports\000"
 lang_1920 = r"C:\Users\deadg\OneDrive\Documents\GithubRep\recordings\Pupil_rl_Languages\1920_rl_world_language\000\exports\000"
 
+# Paths to all the temporary data that will be created once program is ran
+temp_dir = recordings_dir + "\\Temp"
+temp_recording = recordings_dir + "\\Temp\\000"
+default_dir = temp_recording + "\\exports\\000"
 
-
-
-# Just change the folder that is added
-# export_temp_dir is the default temp path
-video_dir = standard_test + "\\world.mp4"
-gaze_dir = standard_test + "\\gaze_positions.csv"
+# default_dir is the default temp path
+video_dir = red_bull_can + "\\world.mp4"
+gaze_dir = red_bull_can + "\\gaze_positions.csv"
 
 import pandas as pd
-
 
 def get_gaze_coords_image(h, w):
     from TextExtraction.frame_selection import matching_gaze
@@ -76,7 +70,7 @@ def get_gaze_coords_image(h, w):
     df["norm_pos_x"] = df["norm_pos_x"].astype(int)
     df["norm_pos_y"] = df["norm_pos_y"].astype(int)
     df["norm_pos_y"] = h - df["norm_pos_y"]
-    # df.drop_duplicates(subset = "world_index", keep = "first", inplace=False)
+    #df.drop_duplicates(subset = "world_index", keep = "first", inplace=False)
 
     return df.values.tolist()
 
@@ -92,7 +86,7 @@ def get_gaze_coords_vid(h, w):
     df["norm_pos_y"] = df["norm_pos_y"].astype(int)
     df["norm_pos_y"] = h - df["norm_pos_y"]
 
-    #df = df.drop_duplicates(subset=["world_index"]).reset_index(drop=True)
+    df = df.drop_duplicates(subset=["world_index"]).reset_index(drop=True)
 
     return df.values.tolist()
 
@@ -116,3 +110,4 @@ print("This is the frames path", frame_dir, "\n")
 print("This csv file path", gaze_dir, "\n")
 print("The world video path: ", video_dir, "\n")
 print("Saved results can be found here: ", result_dir, "\n")
+

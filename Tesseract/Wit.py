@@ -133,8 +133,8 @@ def wit_image(frame_name):
         # x = int(-135.636716707316 + (w/2))
         # y = int(-75.8148250095352 + (h/2))
         newBound = [x - 50, y - 50, x + 50, y + 50]
-        # cv2.rectangle(orig, (newBound[0], newBound[1]), (newBound[2], newBound[3]), (0, 255, 0), 2)
-        # cv2.rectangle(orig, (int(newBound[0]), int(newBound[1])), (int(newBound[2]), int(newBound[3])), (0, 255, 0), 2)
+        #cv2.rectangle(orig, (newBound[0], newBound[1]), (newBound[2], newBound[3]), (0, 255, 0), 2)
+        #cv2.rectangle(orig, (int(newBound[0]), int(newBound[1])), (int(newBound[2]), int(newBound[3])), (0, 255, 0), 2)
 
         for j in range(len(newRects)):
             # If one rectangle is on left side of other
@@ -147,8 +147,8 @@ def wit_image(frame_name):
                 text = pytesseract.image_to_string(r, config='--psm 10')
 
                 if word != text:
-                    final_text = text.replace("\n", "")
-                    words.append(final_text)
+                    text = text.replace("\n", "")
+                    words.append(text)
                     word = text
                 break
 

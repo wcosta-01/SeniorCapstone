@@ -3,17 +3,16 @@ import pandas as pd
 import numpy as np
 import pytesseract
 import cv2
-from file_dir import get_gaze_coords_image, frame_dir, result_dir, selected_frame_dir
+from file_dir import get_gaze_coords_image, frame_dir, result_dir, selected_frame_dir, get_gaze_coords_vid
 from torch import empty
 
-print("Running get_Crafty")
-#if __name__ == '__main__':
-def craft_image(frame_name, language):
+print("Running get_crafty")
+if __name__ == '__main__':
+#def craft_image(frame_name):
     pytesseract.pytesseract.tesseract_cmd = "C:\\Program Files\\Tesseract-OCR\\tesseract.exe"
-
-    # Constructing the path to get the frame file
-    frame = selected_frame_dir + "\\" + frame_name
-    img = cv2.imread(frame)
+    frame_name = ""
+    # This needs to be replaced by the frame
+    img = cv2.imread(frame_name)
     h, w = img.shape[:2]
 
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -22,13 +21,14 @@ def craft_image(frame_name, language):
     if np.mean(binary) < 127:
         binary = cv2.bitwise_not(binary)
 
-    toCheck = get_gaze_coords_image(h, w)
-
+    toCheck = get_gaze_coords_vid(h, w)
+    word = " "
+    words = []
 
     # constructing the result file path
     temp_frame = frame_name.replace(".jpg", "")
     result_txt = result_dir + "\\" + "res_" + temp_frame + ".txt"
-
+    print("get_crafty", result_txt)
 
     my_file = open(result_txt, "r")
     # reading the file
@@ -40,10 +40,9 @@ def craft_image(frame_name, language):
         if box.strip():
             toInt = [int(a) for a in box.split(',')]
             newRects.append(toInt)
-    # print(newRects)
+    print(newRects)
     # binary = img[newRects[0][1]:newRects[0][5], newRects[0][0]:newRects[0][4]]
-    word = " "
-    words = []
+
     for i in range(len(toCheck)):
         x = toCheck[i][1]
         y = toCheck[i][2]
@@ -64,20 +63,13 @@ def craft_image(frame_name, language):
             if(newBound[0] < endX and newBound[2] > startX and newBound[1] < endY and newBound[3] > startY):
                 continue
             else:
-                #print("OVER")
                 binary = img[newRects[j][1]-25:newRects[j][5]+25, newRects[j][0]-25:newRects[j][4]+25]
-                # text = pytesseract.image_to_string(binary)
-                text = pytesseract.image_to_string(binary, lang=language, config='--psm 10')
-                #  print(text)
-
-                # saves the text that was detected
+                text = pytesseract.image_to_string(binary)
                 if word != text:
-                    final_text = text.replace("\n", "")
-                    words.append(final_text)
+                    words.append(text)
                     word = text
+                    print(text)
                 break
         # break
     im = plt.imshow(binary)
-    plt.show()
-    crafty_results = pd.Series(words, dtype="string")
-    return crafty_results
+    plt.show()        

@@ -2,10 +2,8 @@
 Wit is an eye tracking software that uses pupil labs core eye tracking glasses to read signs and any text the user looks at. It can read a book, look up restraints when you look at an advertisement.
 We test our software in three ways, images, video, and real-time.
 
-
 # Pupil Labs
 We have used many of the resources that pupil labs has published along with a few community projects in order to connect this software.
-
 
 ## File Structure
 We have spilt the program into a collection of files that connect and allow for easy modification. 
@@ -25,6 +23,10 @@ Frame selection takes the gaze data from a given recording and uses it to find w
 It does this by taking 3 columns of data from the gaze_position.csv. Which are norm_pos_x, norm_pos_y, and world_index(the closest world video frame).
 - perms: gaze_position.csv file
 - image_data: is an int that contains the selected frame number.
+  #### Before
+  ![Before](images/Frame_Selection_Raw_GazeData.png) 
+  #### After
+  ![After](images/Frame_Selection_Matching_GazeData.png)
 
 ### VideoFrameCapture
 Purpose is to split the video into frames, save them, retrieve them, and check if they have already been created.

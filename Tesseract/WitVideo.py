@@ -151,7 +151,7 @@ def wit_video():
 
         newBound = [x - 15, y - 15, x + 15, y + 15]
 
-        # cv2.rectangle(orig, (int(newBound[0]), int(newBound[1])), (int(newBound[2]), int(newBound[3])), (0, 255, 0), 2)
+        cv2.rectangle(orig, (int(newBound[0]), int(newBound[1])), (int(newBound[2]), int(newBound[3])), (0, 255, 0), 2)
 
         # loop over the bounding boxes
         for (startX, startY, endX, endY) in boxes:
@@ -165,7 +165,7 @@ def wit_video():
                 # draw the bounding box on the frame
                 # print(startX, startY, endX, endY)
                 # Add padding
-                # cv2.rectangle(orig, (startX, startY), (endX, endY), (0, 255, 0), 2)
+                cv2.rectangle(orig, (startX - 15, startY + 15), (endX - 15, endY +15), (0, 0, 255), 2)
 
                 if(newBound[0] < endX and newBound[2] > startX and newBound[1] < endY and newBound[3] > startY):
                     r = orig[startY:endY, startX:endX]
@@ -192,9 +192,8 @@ def wit_video():
         if key == ord("q"):
             break
         index += 1
-    vid_series_results = pd.Series(words, dtype="string")
-    # just return vid_series_results
-    return vid_series_results
+        if index >= len(toCheck):
+            break
     # if we are using a webcam, release the pointer
     #if not args.get("video", False):
        #vs.stop()
@@ -202,5 +201,7 @@ def wit_video():
     vs.release()
     # close all windows
     cv2.destroyAllWindows()
-
-
+    vid_series_results = pd.Series(words, dtype="string")
+    # just return vid_series_results
+    return vid_series_results
+temp = wit_video()
