@@ -1,5 +1,5 @@
 # Welcome to Wit
-Wit is an eye tracking software that uses pupil labs core eye tracking glasses to read signs and any text the user looks at. It can read a book, look up restraints when you look at an advertisement.
+Wit is an eye tracking software that uses pupil labs core eye tracking glasses to read signs and any text the user looks at. It can read a book, look up restaurants when you look at an advertisement.
 We test our software in three ways, images, video, and real-time.
 
 # Pupil Labs
